@@ -1,6 +1,7 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {Card, Icon, ListItem, Button} from '@rneui/base';
+import moment from 'moment';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';
 
@@ -12,10 +13,9 @@ type Props = {
 const MediaListItem = ({item, navigation}: Props) => {
   const {user} = useUserContext();
   return (
-    <Card containerStyle={{backgroundColor: 'lightgreen'}}>
+    <Card containerStyle={{backgroundColor: '#144b29'}}>
       <Text>
-        @{item.username}, at:{' '}
-        {new Date(item.created_at).toLocaleString('fi-FI')}
+        @{item.username} {moment(item.created_at).fromNow()}{' '}
       </Text>
       <TouchableOpacity
         onPress={() => {
