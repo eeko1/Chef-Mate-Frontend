@@ -9,6 +9,7 @@ const Home = ({navigation}: {navigation: NavigationProp<ParamListBase>}) => {
   return (
     <>
       <FlatList
+        style={{backgroundColor: 'green'}}
         data={mediaArray}
         renderItem={({item}) => (
           <MediaListItem navigation={navigation} item={item} />

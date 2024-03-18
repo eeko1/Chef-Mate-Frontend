@@ -10,10 +10,13 @@ type Props = {
 };
 
 const MediaListItem = ({item, navigation}: Props) => {
-  // tai propsin sijasta hookilla const navigation = useNavigation();
   const {user} = useUserContext();
   return (
-    <Card>
+    <Card containerStyle={{backgroundColor: 'lightgreen'}}>
+      <Text>
+        @{item.username}, at:{' '}
+        {new Date(item.created_at).toLocaleString('fi-FI')}
+      </Text>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('Single Media', item);
@@ -25,10 +28,6 @@ const MediaListItem = ({item, navigation}: Props) => {
         />
         <Card.Divider />
         <Card.Title>{item.title}</Card.Title>
-        <Text>
-          By: {item.username}, at:{' '}
-          {new Date(item.created_at).toLocaleString('fi-FI')}
-        </Text>
         <Card.Divider />
         <ListItem>
           {user && user.user_id === item.user_id ? (
