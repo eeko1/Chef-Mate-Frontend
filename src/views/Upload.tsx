@@ -1,5 +1,5 @@
 import {Controller, useForm} from 'react-hook-form';
-import {Button, Card, Input} from '@rneui/base';
+import {Button, Card, Input, Text} from '@rneui/base';
 import * as ImagePicker from 'expo-image-picker';
 import {useEffect, useState} from 'react';
 import {TouchableOpacity, Keyboard, ScrollView, Alert} from 'react-native';
@@ -12,6 +12,7 @@ import {
 } from '@react-navigation/native';
 import {useFile, useMedia} from '../hooks/apiHooks';
 import {useUpdateContext} from '../hooks/UpdateHook';
+import colors from '../styles/colors';
 
 const Upload = () => {
   const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(
@@ -81,13 +82,19 @@ const Upload = () => {
   }, []);
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor: colors.darkgreen}}>
       <TouchableOpacity
         onPress={() => Keyboard.dismiss()}
-        style={{flex: 1}}
+        style={{flex: 1, backgroundColor: colors.darkgreen}}
         activeOpacity={1}
       >
-        <Card>
+        <Card
+          containerStyle={{
+            backgroundColor: colors.darkgreen,
+            borderWidth: 0,
+            shadowColor: 'transparent',
+          }}
+        >
           {image && image.assets![0].mimeType?.includes('video') ? (
             <Video
               source={{uri: image.assets![0].uri}}
@@ -95,37 +102,78 @@ const Upload = () => {
               useNativeControls
             />
           ) : (
-            <Card.Image
-              onPress={pickImage}
-              style={{aspectRatio: 1, height: 300}}
-              source={{
-                uri: image
-                  ? image.assets![0].uri
-                  : 'https://via.placeholder.com/150?text=Choose+media',
-              }}
-            />
+            <>
+              <Text
+                style={{
+                  fontSize: 30,
+                  marginBottom: 15,
+                  textAlign: 'center',
+                  color: colors.text,
+                }}
+              >
+                Chef Mate
+              </Text>
+              <Card.Image
+                onPress={pickImage}
+                style={{aspectRatio: 1, height: 300}}
+                source={{
+                  uri: image
+                    ? image.assets![0].uri
+                    : 'https://via.placeholder.com/150?text=Choose+media',
+                }}
+              />
+            </>
           )}
           <Card.Divider />
+          <Text style={{fontSize: 20, marginBottom: 5, color: colors.text}}>
+            Recipe Title
+          </Text>
           <Controller
             control={control}
             rules={{
               required: {
                 value: true,
-                message: 'Title tarttis laittaa',
+                message: 'Recipe title is required',
               },
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
-                placeholder="Title"
+                placeholder=""
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.title?.message}
+                style={{backgroundColor: colors.mossgreen}}
               />
             )}
             name="title"
           />
-
+          <Text style={{fontSize: 20, marginBottom: 5, color: colors.text}}>
+            Ingredients
+          </Text>
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: 'Ingredients are required',
+              },
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                placeholder=""
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.ingredients?.message}
+                style={{backgroundColor: colors.mossgreen}}
+              />
+            )}
+            name="ingredients"
+          />
+          <Text style={{fontSize: 20, marginBottom: 5, color: colors.text}}>
+            Instructions
+          </Text>
           <Controller
             control={control}
             rules={{
@@ -133,14 +181,18 @@ const Upload = () => {
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
-                placeholder="Description"
+                placeholder=""
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.description?.message}
                 multiline={true}
                 numberOfLines={5}
-                style={{height: 120, textAlignVertical: 'top'}}
+                style={{
+                  height: 120,
+                  textAlignVertical: 'top',
+                  backgroundColor: colors.mossgreen,
+                }}
               />
             )}
             name="description"

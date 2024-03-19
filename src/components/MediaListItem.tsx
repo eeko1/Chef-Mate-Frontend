@@ -1,8 +1,10 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {Card, Icon, ListItem, Button} from '@rneui/base';
+import moment from 'moment';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';
+import colors from '../styles/colors';
 
 type Props = {
   item: MediaItemWithOwner;
@@ -10,58 +12,67 @@ type Props = {
 };
 
 const MediaListItem = ({item, navigation}: Props) => {
-  // tai propsin sijasta hookilla const navigation = useNavigation();
   const {user} = useUserContext();
   return (
-    <Card>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Single Media', item);
+    <View style={{paddingBottom: 70}}>
+      <Card
+        containerStyle={{
+          backgroundColor: colors.lightgreen,
+          borderWidth: 0,
+          shadowColor: 'transparent',
         }}
       >
-        <Card.Image
-          style={{aspectRatio: 1, height: 300}}
-          source={{uri: 'http:' + item.thumbnail}}
-        />
-        <Card.Divider />
-        <Card.Title>{item.title}</Card.Title>
-        <Text>
-          By: {item.username}, at:{' '}
-          {new Date(item.created_at).toLocaleString('fi-FI')}
+        <Text style={{color: colors.blue, fontSize: 20, paddingBottom: 10}}>
+          @{item.username}
         </Text>
-        <Card.Divider />
-        <ListItem>
-          {user && user.user_id === item.user_id ? (
-            <>
-              <Button
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {
+            navigation.navigate('Single Media', item);
+          }}
+        >
+          <Card.Image
+            style={{aspectRatio: 1, height: 300}}
+            source={{uri: 'http:' + item.thumbnail}}
+          />
+
+          <Card.Title style={{color: colors.blue, paddingTop: 10}}>
+            {item.title}
+          </Card.Title>
+          <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+            {user && user.user_id === item.user_id ? (
+              <>
+                <Button
+                  onPress={() => {
+                    navigation.navigate('Modify', item);
+                  }}
+                >
+                  <Icon type="ionicon" name="create" color="white" />
+                </Button>
+                <Button
+                  color="error"
+                  onPress={() => {
+                    console.log('delete');
+                  }}
+                >
+                  {' '}
+                  <Icon type="ionicon" name="trash" color="white" />
+                </Button>
+              </>
+            ) : (
+              <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('Modify', item);
+                  navigation.navigate('Single Media', item);
                 }}
-              >
-                <Icon type="ionicon" name="create" color="white" />
-              </Button>
-              <Button
-                color="error"
-                onPress={() => {
-                  console.log('delete');
-                }}
-              >
-                {' '}
-                <Icon type="ionicon" name="trash" color="white" />
-              </Button>
-            </>
-          ) : (
-            <>
-              <Icon
-                type="ionicon"
-                name={item.media_type.includes('image') ? 'image' : 'film'}
-              />
-              <ListItem.Chevron color={'black'} />
-            </>
-          )}
-        </ListItem>
-      </TouchableOpacity>
-    </Card>
+              ></TouchableOpacity>
+            )}
+          </View>
+          <Text style={{paddingTop: 10, color: colors.blue}}>
+            {moment(item.created_at).fromNow()}{' '}
+          </Text>
+        </TouchableOpacity>
+      </Card>
+    </View>
   );
 };
 export default MediaListItem;
