@@ -10,9 +10,16 @@ import {
   ParamListBase,
   useNavigation,
 } from '@react-navigation/native';
+import * as Font from 'expo-font';
 import {useFile, useMedia} from '../hooks/apiHooks';
 import {useUpdateContext} from '../hooks/UpdateHook';
 import colors from '../styles/colors';
+
+async function loadFonts() {
+  await Font.loadAsync({
+    LogoFont: require('../styles/Fonts/Cherish-Regular.ttf'),
+  });
+}
 
 const Upload = () => {
   const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(
@@ -23,7 +30,7 @@ const Upload = () => {
   const {update, setUpdate} = useUpdateContext();
   const navigation: NavigationProp<ParamListBase> = useNavigation();
 
-  const initValues = {title: '', description: ''};
+  const initValues = {title: '', description: '', ingredients: ''};
   const {
     control,
     handleSubmit,
@@ -38,7 +45,7 @@ const Upload = () => {
     setImage(null);
   };
 
-  const doUpload = async (inputs: {title: string; description: string}) => {
+  const doUpload = async (inputs: {title: string; description: string; ingredients: string}) => {
     if (!image) {
       Alert.alert('No media selected');
       return;
@@ -60,7 +67,6 @@ const Upload = () => {
   };
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -74,6 +80,7 @@ const Upload = () => {
   };
 
   useEffect(() => {
+    loadFonts();
     const unsubscribe = navigation.addListener('blur', () => {
       resetForm();
     });
@@ -93,6 +100,7 @@ const Upload = () => {
             backgroundColor: colors.darkgreen,
             borderWidth: 0,
             shadowColor: 'transparent',
+            paddingHorizontal: 20,
           }}
         >
           {image && image.assets![0].mimeType?.includes('video') ? (
@@ -106,6 +114,7 @@ const Upload = () => {
               <Text
                 style={{
                   fontSize: 30,
+                  fontFamily: 'LogoFont',
                   marginBottom: 15,
                   textAlign: 'center',
                   color: colors.text,
@@ -143,7 +152,11 @@ const Upload = () => {
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.title?.message}
-                style={{backgroundColor: colors.mossgreen}}
+                inputContainerStyle={{
+                  backgroundColor: colors.mossgreen,
+                  borderBottomWidth: 0,
+                }}
+                containerStyle={{paddingHorizontal: 0}}
               />
             )}
             name="title"
@@ -166,7 +179,11 @@ const Upload = () => {
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.ingredients?.message}
-                style={{backgroundColor: colors.mossgreen}}
+                inputContainerStyle={{
+                  backgroundColor: colors.mossgreen,
+                  borderBottomWidth: 0,
+                }}
+                containerStyle={{paddingHorizontal: 0}}
               />
             )}
             name="ingredients"
@@ -177,7 +194,14 @@ const Upload = () => {
           <Controller
             control={control}
             rules={{
-              maxLength: 1000,
+              required: {
+                value: true,
+                message: 'Instructions are required',
+              },
+              maxLength: {
+                value: 1000,
+                message: 'Instructions cannot exceed 1000 characters',
+              },
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
@@ -188,18 +212,28 @@ const Upload = () => {
                 errorMessage={errors.description?.message}
                 multiline={true}
                 numberOfLines={5}
-                style={{
+                inputContainerStyle={{
                   height: 120,
                   textAlignVertical: 'top',
                   backgroundColor: colors.mossgreen,
+                  borderBottomWidth: 0,
                 }}
+                containerStyle={{paddingHorizontal: 0}}
               />
             )}
             name="description"
           />
-          <Button title="Choose media" onPress={pickImage} />
           <Card.Divider />
-          <Button title="Upload" onPress={handleSubmit(doUpload)} />
+          <Button
+            title="Upload"
+            onPress={handleSubmit(doUpload)}
+            buttonStyle={{
+              borderWidth: 0.5,
+              borderColor: 'black',
+              backgroundColor: colors.softgreen,
+            }}
+            titleStyle={{color: 'black'}}
+          />
           <Card.Divider />
           <Button title="Reset" onPress={resetForm} />
         </Card>
