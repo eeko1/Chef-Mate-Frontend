@@ -1,6 +1,6 @@
 import {Controller, useForm} from 'react-hook-form';
-import {Button, Card, Input} from '@rneui/base';
-import {Alert} from 'react-native';
+import {Card, Input} from '@rneui/base';
+import {Alert, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {useUser} from '../hooks/apiHooks';
 
 const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
@@ -38,13 +38,13 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
   };
 
   return (
-    <Card>
+    <Card containerStyle={styles.container}>
       <Controller
         control={control}
         rules={{
           required: {
             value: true,
-            message: 'is required',
+            message: 'Username is required',
           },
           validate: async (value) => {
             try {
@@ -64,6 +64,7 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
             value={value}
             autoCapitalize="none"
             errorMessage={errors.username?.message}
+            style={styles.username}
           />
         )}
         name="username"
@@ -79,7 +80,7 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
           //   message:
           //     'Password must contain at least 5 characters, 1 special character (@, $, !, %, *, #, ?, &), and 1 number',
           // },
-          required: {value: true, message: 'is required'},
+          required: {value: true, message: 'Password is required'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -89,6 +90,7 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
             onChangeText={onChange}
             value={value}
             errorMessage={errors.password?.message}
+            style={styles.password}
           />
         )}
         name="password"
@@ -97,7 +99,7 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
       <Controller
         control={control}
         rules={{
-          required: {value: true, message: 'is required'},
+          required: {value: true, message: 'Password is required'},
           validate: (value) =>
             value === getValues().password ? true : 'Passwords do not match',
         }}
@@ -109,6 +111,7 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
             onChangeText={onChange}
             value={value}
             errorMessage={errors.confirmPassword?.message}
+            style={styles.password}
           />
         )}
         name="confirmPassword"
@@ -118,7 +121,7 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
         control={control}
         rules={{
           maxLength: 100,
-          required: {value: true, message: 'is required'},
+          required: {value: true, message: 'Email is required'},
           pattern: {
             value: /^\S+@\S+\.\S+$/,
             message: 'Invalid email address',
@@ -140,13 +143,54 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
             value={value}
             errorMessage={errors.email?.message}
             autoCapitalize="none"
+            style={styles.email}
           />
         )}
         name="email"
       />
-      <Button title="Register" onPress={handleSubmit(doRegister)} />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleSubmit(doRegister)}
+      >
+        <Text style={styles.button}>Register</Text>
+      </TouchableOpacity>
     </Card>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    backgroundColor: '#7EAA92',
+  },
+  username: {
+    color: 'white',
+    backgroundColor: '#C8E4B2',
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 5,
+  },
+  password: {
+    color: 'white',
+    backgroundColor: '#C8E4B2',
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 5,
+  },
+  email: {
+    color: 'white',
+    backgroundColor: '#C8E4B2',
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 5,
+  },
+  button: {
+    backgroundColor: '#7EAA92',
+    color: 'black',
+    alignItems: 'center',
+    fontSize: 20,
+  },
+});
 
 export default RegisterForm;
