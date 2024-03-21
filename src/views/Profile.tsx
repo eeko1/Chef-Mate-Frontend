@@ -13,24 +13,17 @@ const Profile = () => {
   return (
     <>
       {user && (
-        <ScrollView>
+        <ScrollView style={{backgroundColor: '#144b29'}}>
           <Card>
             <Card.Image source={{uri: 'https://placekitten.com/300/300'}} />
             <ListItem>
               <Icon name="person" />
               <ListItem.Title>{user.username}</ListItem.Title>
             </ListItem>
-            <ListItem>
-              <Icon name="email" />
-              <ListItem.Title>{user.email}</ListItem.Title>
-            </ListItem>
-            <ListItem>
-              <ListItem.Title>user id: {user.user_id}</ListItem.Title>
-            </ListItem>
             <Card.Divider />
             <Button onPress={() => navigation.navigate('My Files')}>
-              My Files &nbsp;
-              <Icon name="folder" color="white" />
+              My Posts &nbsp;
+              <Icon name="folder" color="#0a1c13" />
             </Button>
             <Card.Divider />
             <Button onPress={handleLogout}>
