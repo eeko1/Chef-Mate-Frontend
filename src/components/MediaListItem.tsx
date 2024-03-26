@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {Card, Icon, ListItem, Button} from '@rneui/base';
 import moment from 'moment';
@@ -22,9 +22,22 @@ const MediaListItem = ({item, navigation}: Props) => {
           shadowColor: 'transparent',
         }}
       >
-        <Text style={{color: colors.blue, fontSize: 20, paddingBottom: 10}}>
-          @{item.username}
-        </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Image
+            source={{
+              uri: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Profile\nImage',
+            }}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 25,
+              marginRight: 10,
+            }}
+          />
+          <Text style={{color: colors.blue, fontSize: 20, paddingBottom: 10}}>
+            @{item.username}
+          </Text>
+        </View>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
@@ -35,10 +48,10 @@ const MediaListItem = ({item, navigation}: Props) => {
             style={{aspectRatio: 1, height: 300}}
             source={{uri: 'http:' + item.thumbnail}}
           />
-
           <Card.Title style={{color: colors.blue, paddingTop: 10}}>
             {item.title}
           </Card.Title>
+          {/*TODO: Add likes*/}
           <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
             {user && user.user_id === item.user_id ? (
               <>
