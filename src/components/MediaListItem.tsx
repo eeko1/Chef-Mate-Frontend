@@ -22,7 +22,13 @@ const MediaListItem = ({item, navigation}: Props) => {
           shadowColor: 'transparent',
         }}
       >
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingBottom: 10,
+          }}
+        >
           <Image
             source={{
               uri: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Profile\nImage',
@@ -48,13 +54,35 @@ const MediaListItem = ({item, navigation}: Props) => {
             style={{aspectRatio: 1, height: 300}}
             source={{uri: 'http:' + item.thumbnail}}
           />
-          <Text style={{paddingTop: 10, color: colors.blue}}>
-            {(item.likes ? item.likes.length : 0) + ' likes'}
-          </Text>
-          <Card.Title style={{color: colors.blue, paddingTop: 10}}>
-            {item.title}
-          </Card.Title>
-          {/*TODO: Add likes*/}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingTop: 10,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingTop: 10,
+              }}
+            >
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon type="ionicon" name="heart" color="red" />
+                <Text style={{color: colors.blue}}>
+                  {item.likes ? item.likes.length : ' ' + 0}
+                </Text>
+              </View>
+              <Card.Title
+                style={{color: colors.blue, paddingTop: 14, paddingLeft: 10}}
+              >
+                {item.title}
+              </Card.Title>
+            </View>
+          </View>
           <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
             {user && user.user_id === item.user_id ? (
               <>
