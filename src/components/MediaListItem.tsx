@@ -111,6 +111,9 @@ const MediaListItem = ({item, navigation}: Props) => {
               ></TouchableOpacity>
             )}
           </View>
+          <Text style={{color: colors.blue}}>
+            Reviews: {item.ratings ? item.ratings.length : ' ' + 0}
+          </Text>
           <Text style={{paddingTop: 10, color: colors.blue}}>
             {moment(item.created_at).fromNow()}{' '}
           </Text>
