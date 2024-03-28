@@ -48,6 +48,9 @@ const MediaListItem = ({item, navigation}: Props) => {
             style={{aspectRatio: 1, height: 300}}
             source={{uri: 'http:' + item.thumbnail}}
           />
+          <Text style={{paddingTop: 10, color: colors.blue}}>
+            {(item.likes ? item.likes.length : 0) + ' likes'}
+          </Text>
           <Card.Title style={{color: colors.blue, paddingTop: 10}}>
             {item.title}
           </Card.Title>
