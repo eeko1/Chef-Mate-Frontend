@@ -51,7 +51,7 @@ const MediaListItem = ({item, navigation}: Props) => {
           }}
         >
           <Card.Image
-            style={{aspectRatio: 1, height: 300}}
+            style={{aspectRatio: 1, height: 300, borderRadius: 10}}
             source={{uri: 'http:' + item.thumbnail}}
           />
           <View
@@ -72,12 +72,17 @@ const MediaListItem = ({item, navigation}: Props) => {
             >
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Icon type="ionicon" name="heart" color="red" />
-                <Text style={{color: colors.blue}}>
+                <Text style={{color: colors.blue, fontSize: 20}}>
                   {item.likes ? item.likes.length : ' ' + 0}
                 </Text>
               </View>
               <Card.Title
-                style={{color: colors.blue, paddingTop: 14, paddingLeft: 10}}
+                style={{
+                  color: colors.blue,
+                  paddingTop: 14,
+                  paddingLeft: 10,
+                  fontSize: 20,
+                }}
               >
                 {item.title}
               </Card.Title>
@@ -111,9 +116,19 @@ const MediaListItem = ({item, navigation}: Props) => {
               ></TouchableOpacity>
             )}
           </View>
-          <Text style={{color: colors.blue}}>
-            Reviews: {item.ratings ? item.ratings.length : ' ' + 0}
-          </Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={{color: colors.blue, fontSize: 20}}>
+              Reviews: {item.ratings ? item.ratings.length : 0} {' ('}
+              {item.ratings
+                ? (
+                    item.ratings.reduce((a, b) => a + b, 0) /
+                    item.ratings.length
+                  ).toFixed(1)
+                : 0}{' '}
+            </Text>
+            <Icon type="ionicon" name="star" color="yellow" />
+            <Text style={{color: colors.blue, fontSize: 20}}>)</Text>
+          </View>
           <Text style={{paddingTop: 10, color: colors.blue}}>
             {moment(item.created_at).fromNow()}{' '}
           </Text>
