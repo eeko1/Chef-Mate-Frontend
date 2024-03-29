@@ -1,5 +1,5 @@
 export default {
-  darkgreen: '#0A1C13', //background color
+  darkgreen: '#0F5132', //background color
   lightgreen: '#144B29',
   mossgreen: '#86934F', //shrek / input
   sage: '#D0D09B',
@@ -9,4 +9,5 @@ export default {
   coral: '#FF7F50', // testissä
   teal: '#008080', // testissä
   softgreen: '#8FBC8F', // testissä AIKA HYVÄ
+  lemon: '#BFEA7C', // testissä
 };
