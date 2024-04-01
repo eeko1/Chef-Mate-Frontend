@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Button, Icon, Badge} from '@rneui/base';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {Text, View, TouchableOpacity} from 'react-native';
 import {useEffect, useReducer} from 'react';
 import {useLike} from '../hooks/apiHooks';
 import {Like, MediaItemWithOwner} from '../types/DBTypes';
@@ -99,27 +100,27 @@ const Likes = ({item}: {item: MediaItemWithOwner}) => {
   console.log(likeState);
 
   return (
-    <Button
-      onPress={handleLike}
-      type="clear"
-      containerStyle={{
-        position: 'absolute',
-        top: 1,
-        right: 3,
-        zIndex: 1,
-      }}
-    >
-      <Icon
-        type="material-community"
-        color="#333"
-        name={likeState.userLike ? 'thumb-up' : 'thumb-up-outline'}
-      />
-      <Badge
-        value={likeState.count}
-        containerStyle={{position: 'absolute', top: 0, right: 0}}
-      />
-    </Button>
+    <View>
+      <Text>Likes: {likeState.count}</Text>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: '#007AFF',
+          padding: 10,
+        }}
+        onPress={handleLike}
+      >
+        {likeState.userLike ? (
+          <Icon name="heart" size={20} color="#fff" />
+        ) : (
+          <Icon name="heart-o" size={20} color="#fff" />
+        )}
+        <Text style={{color: '#fff', marginLeft: 5}}>
+          {likeState.userLike ? 'Unlike' : 'Like'}
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 };
-
 export default Likes;

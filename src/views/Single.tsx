@@ -1,16 +1,19 @@
-import {Card, Text, ListItem, Icon} from '@rneui/themed';
+import {Card, Text, ListItem, Icon, Image} from '@rneui/themed';
 import {Video, ResizeMode} from 'expo-av';
 import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Keyboard,
+  View,
 } from 'react-native';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import Ratings from '../components/Ratings';
 import Comments from '../components/Comments';
 import Likes from '../components/Likes';
+import colors from '../styles/colors';
 
 const Single = ({route}: any) => {
   const item: MediaItemWithOwner = route.params;
@@ -20,11 +23,38 @@ const Single = ({route}: any) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView>
+      <ScrollView
+        style={{
+          backgroundColor: colors.darkgreen,
+        }}
+      >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <Card>
-            <Card.Title>{item.title}</Card.Title>
-            <Likes item={item} />
+          <Card containerStyle={{backgroundColor: colors.darkgreen}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                top: 20,
+                zIndex: 1,
+              }}
+            >
+              <Image
+                source={{
+                  uri: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Profile\nImage',
+                }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                  marginRight: 10,
+                }}
+              />
+              <Text
+                style={{color: colors.blue, fontSize: 20, paddingBottom: 10}}
+              >
+                @{item.username}
+              </Text>
+            </View>
             {fileType === 'image' ? (
               <Card.Image
                 style={{height: 350, aspectRatio: 1}}
@@ -39,24 +69,58 @@ const Single = ({route}: any) => {
                 resizeMode={ResizeMode.CONTAIN}
               />
             )}
-            <Card.FeaturedSubtitle style={{color: 'black'}}>
-              {item.description}
-            </Card.FeaturedSubtitle>
-            <ListItem>
-              <Icon name="today" />
-              <Text>{new Date(item.created_at).toLocaleString('fi-FI')}</Text>
-            </ListItem>
-            <ListItem>
-              <Icon name="person" />
-              <Text>{item.username}</Text>
-            </ListItem>
-            <ListItem>
-              <Icon name="image" />
-              <Text>
-                {fileType} / {fileFormat}, {Math.round(item.filesize / 1024)} kB
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: -20,
+              }}
+            >
+              <Icon type="ionicon" name="heart" color="red" />
+              <Text style={{color: colors.blue, fontSize: 20}}>
+                {item.Likes ? item.Likes.length : ' ' + 0}
               </Text>
-            </ListItem>
+              <Text
+                style={{
+                  color: colors.text,
+                  marginLeft: 10,
+                  fontSize: 20,
+                }}
+              >
+                {item.title}
+              </Text>
+            </View>
             <Ratings item={item} size={35} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 10,
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  borderRadius: 5,
+                  flex: 1,
+                  alignItems: 'center',
+                  marginRight: 5,
+                }}
+              >
+                <Text>Reviews</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  borderRadius: 5,
+                  flex: 1,
+                  alignItems: 'center',
+                  marginLeft: 5,
+                }}
+              >
+                <Text>Recipe Details</Text>
+              </TouchableOpacity>
+            </View>
             <Comments item={item} />
           </Card>
         </TouchableWithoutFeedback>
