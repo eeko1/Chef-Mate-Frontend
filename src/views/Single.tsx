@@ -1,4 +1,5 @@
-import {Card, Text, ListItem, Icon, Image} from '@rneui/themed';
+import React, {useState} from 'react';
+import {Card, Text, Icon, Image} from '@rneui/themed';
 import {Video, ResizeMode} from 'expo-av';
 import {
   ScrollView,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   Keyboard,
   View,
+  TextInput,
 } from 'react-native';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import Ratings from '../components/Ratings';
@@ -18,16 +20,13 @@ import colors from '../styles/colors';
 const Single = ({route}: any) => {
   const item: MediaItemWithOwner = route.params;
   const [fileType, fileFormat] = item.media_type.split('&#x2F;');
+  const [view, setView] = useState<'reviews' | 'details'>('reviews');
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView
-        style={{
-          backgroundColor: colors.darkgreen,
-        }}
-      >
+      <ScrollView style={{backgroundColor: colors.darkgreen}}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Card containerStyle={{backgroundColor: colors.darkgreen}}>
             <View
@@ -80,13 +79,7 @@ const Single = ({route}: any) => {
               <Text style={{color: colors.blue, fontSize: 20}}>
                 {item.Likes ? item.Likes.length : ' ' + 0}
               </Text>
-              <Text
-                style={{
-                  color: colors.text,
-                  marginLeft: 10,
-                  fontSize: 20,
-                }}
-              >
+              <Text style={{color: colors.text, marginLeft: 10, fontSize: 20}}>
                 {item.title}
               </Text>
             </View>
@@ -99,6 +92,7 @@ const Single = ({route}: any) => {
               }}
             >
               <TouchableOpacity
+                onPress={() => setView('reviews')}
                 style={{
                   padding: 10,
                   borderRadius: 5,
@@ -110,6 +104,7 @@ const Single = ({route}: any) => {
                 <Text>Reviews</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => setView('details')}
                 style={{
                   padding: 10,
                   borderRadius: 5,
@@ -121,7 +116,43 @@ const Single = ({route}: any) => {
                 <Text>Recipe Details</Text>
               </TouchableOpacity>
             </View>
-            <Comments item={item} />
+            {view === 'reviews' && (
+              <View>
+                <Comments item={item} />
+              </View>
+            )}
+            {view === 'details' && (
+              <View
+                style={{
+                  backgroundColor: colors.mossgreen,
+                  marginBottom: 10,
+                  padding: 8,
+                  borderRadius: 5,
+                }}
+              >
+                <Text style={{color: 'white', fontSize: 18, paddingBottom: 10}}>
+                  Recipe Details:
+                </Text>
+                <Text style={{color: 'white', fontSize: 16}}>
+                  Ingredients:
+                  {'\n'}- 2 cups flour
+                  {'\n'}- 1 tsp baking powder
+                  {'\n'}- 1/2 tsp salt
+                  {'\n'}- 3/4 cup unsalted butter
+                  {'\n'}- 1 cup sugar
+                  {'\n'}- 2 eggs
+                  {'\n'}- 2 tsp vanilla extract
+                  {'\n\n'}
+                  Instructions:
+                  {'\n'}1. Preheat your oven to 350°F (175°C).
+                  {'\n'}2. Mix flour, baking powder, and salt in a bowl.
+                  {'\n'}3. In a separate bowl, beat butter and sugar until fluffy. Add eggs and vanilla, mixing well.
+                  {'\n'}4. Gradually blend in the dry ingredients. Stir until well combined.
+                  {'\n'}5. Bake for 25-30 minutes, or until golden.
+                  {'\n'}6. Let cool and serve.
+                </Text>
+              </View>
+            )}
           </Card>
         </TouchableWithoutFeedback>
       </ScrollView>

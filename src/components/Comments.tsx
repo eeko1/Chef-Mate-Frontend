@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {View, Text} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {Input, Card, Button, ListItem} from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -6,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useUserContext} from '../hooks/ContextHooks';
 import {Comment, MediaItemWithOwner} from '../types/DBTypes';
 import {useComment} from '../hooks/apiHooks';
+import colors from '../styles/colors';
 
 const Comments = ({item}: {item: MediaItemWithOwner}) => {
   const [comments, setComments] = useState<
@@ -65,49 +67,76 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
 
   return (
     <>
-      {comments.length > 0 && (
-        <Card>
-          <Card.Title>Comments:</Card.Title>
-          {comments.map((comment) => (
-            <ListItem>
-              <ListItem.Content>
-                <ListItem.Subtitle>
-                  On {new Date(comment.created_at!).toLocaleDateString('fi-FI')}{' '}
-                  {comment.username} wrote:
-                </ListItem.Subtitle>
-                <ListItem.Title>{comment.comment_text}</ListItem.Title>
-              </ListItem.Content>
-            </ListItem>
-          ))}
-        </Card>
-      )}
-      {user && (
-        <Card>
-          <Card.Title>Post Comment</Card.Title>
-          <Controller
-            control={control}
-            rules={{
-              required: {
-                value: true,
-                message: 'Kommentti tarttis laittaa',
-              },
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                errorMessage={errors.comment_text?.message}
-                placeholder="Write a comment"
-                multiline={true}
-              />
-            )}
-            name="comment_text"
-          />
-          <Button onPress={handleSubmit(doComment)} title={'Post'} />
-          <Card.Divider />
-        </Card>
-      )}
+      <Card containerStyle={{backgroundColor: colors.darkgreen}}>
+        <Card.Title style={{color: colors.text}}>Reviews</Card.Title>
+
+        {comments.length > 0 ? (
+          comments.map((comment, index) => (
+            <View
+              key={index}
+              style={{
+                backgroundColor: colors.mossgreen,
+                marginBottom: 10,
+                padding: 8,
+                borderRadius: 5,
+              }}
+            >
+              <Text style={{color: colors.text, fontWeight: 'bold'}}>
+                {comment.username}:
+              </Text>
+              <Text style={{color: colors.text}}>{comment.comment_text}</Text>
+              <Text style={{color: colors.text}}>
+                Posted on{' '}
+                {new Date(comment.created_at).toLocaleDateString('fi-FI')}
+              </Text>
+            </View>
+          ))
+        ) : (
+          <Text style={{color: colors.text, textAlign: 'center', padding: 10}}>
+            No reviews yet.
+          </Text>
+        )}
+
+        {user && (
+          <>
+            <Card.Divider
+              style={{backgroundColor: colors.text, marginVertical: 10}}
+            />
+            <Card.Title style={{color: colors.text}}>Post Review</Card.Title>
+            <Controller
+              control={control}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'A review is required.',
+                },
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.comment_text?.message}
+                  placeholder="Write a review"
+                  multiline={true}
+                  inputStyle={{
+                    backgroundColor: colors.mossgreen,
+                    color: colors.text,
+                  }}
+                  placeholderTextColor={colors.text}
+                />
+              )}
+              name="comment_text"
+            />
+            <Button
+              onPress={handleSubmit(doComment)}
+              title={'Post'}
+              buttonStyle={{backgroundColor: colors.mossgreen, marginTop: 10}}
+              titleStyle={{color: colors.text}}
+            />
+          </>
+        )}
+      </Card>
     </>
   );
 };
