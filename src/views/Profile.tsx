@@ -12,7 +12,6 @@ import {
   View,
 } from 'react-native';
 import {useUserContext} from '../hooks/ContextHooks';
-import ProfileModal from '../components/modal';
 
 const Profile = () => {
   const {handleLogout, user} = useUserContext();
@@ -21,7 +20,7 @@ const Profile = () => {
     <>
       {user && (
         <ScrollView contentContainerStyle={styles.container}>
-          <TouchableOpacity onPress={ProfileModal}>
+          <TouchableOpacity onPress={() => navigation.navigate('ProfileModal')}>
             <Icon name="edit" color="white" style={styles.edit} />
           </TouchableOpacity>
           <Card.Image
