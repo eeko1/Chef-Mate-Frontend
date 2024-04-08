@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import {useUserContext} from '../hooks/ContextHooks';
+import colors from '../styles/colors';
 
 const Profile = () => {
   const {handleLogout, user} = useUserContext();
@@ -29,7 +30,7 @@ const Profile = () => {
           />
           <ListItem containerStyle={styles.listItem}>
             <ListItem.Title style={styles.listItemTitle}>
-              {user.username}
+              @{user.username}
             </ListItem.Title>
           </ListItem>
           <View style={styles.stats}>
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0a1c13',
   },
   listItem: {
-    backgroundColor: '#7EAA92',
+    backgroundColor: colors.lightgreen,
   },
   listItemTitle: {
     backgroundColor: '#7EAA92',
@@ -119,8 +120,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: 'black',
-    fontSize: 20,
+    color: colors.darkgreen,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   buttons: {
     flexDirection: 'row',
