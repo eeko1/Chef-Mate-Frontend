@@ -60,7 +60,7 @@ const Single = ({route}: any) => {
                 resizeMode="contain"
                 source={{uri: 'http:' + item.filename}}
               />
-            ) : (
+            ) : (Z
               <Video
                 style={{height: 350}}
                 source={{uri: 'http:' + item.filename}}
