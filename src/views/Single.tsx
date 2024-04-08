@@ -4,7 +4,9 @@ import {MediaItemWithOwner} from '../types/DBTypes';
 
 const Single = ({route}: any) => {
   const item: MediaItemWithOwner = route.params;
-  const [fileType, fileFormat] = item.media_type.split('&#x2F;');
+  const [fileType, fileFormat] = item.media_type.split('/');
+  console.log(fileType, fileFormat);
+  console.log(item);
 
   return (
     <Card>
@@ -13,12 +15,12 @@ const Single = ({route}: any) => {
         <Card.Image
           style={{height: 400}}
           resizeMode="contain"
-          source={{uri: 'http:' + item.filename}}
+          source={{uri: item.filename}}
         />
       ) : (
         <Video
           style={{height: 400}}
-          source={{uri: 'http:' + item.filename}}
+          source={{uri: item.filename}}
           useNativeControls
           resizeMode={ResizeMode.CONTAIN}
         />

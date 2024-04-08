@@ -52,7 +52,7 @@ const MediaListItem = ({item, navigation}: Props) => {
         >
           <Card.Image
             style={{aspectRatio: 1, height: 300, borderRadius: 10}}
-            source={{uri: 'http:' + item.thumbnail}}
+            source={{uri: item.thumbnail}}
           />
           <View
             style={{
