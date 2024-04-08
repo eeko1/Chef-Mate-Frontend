@@ -4,4 +4,5 @@ export default {
   mossgreen: '#86934F',
   sage: '#D0D09B',
   blue: '#ACCBED',
+  text: '#FEF5F5',
 };
