@@ -40,7 +40,6 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
 
   return (
     <Card containerStyle={styles.container}>
-      <UploadImage />
       <Controller
         control={control}
         rules={{

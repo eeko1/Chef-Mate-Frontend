@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
+import UploadImage from '../components/ImagePicker';
 
 const Profile = () => {
   const {handleLogout, user} = useUserContext();
@@ -24,10 +25,7 @@ const Profile = () => {
           <TouchableOpacity onPress={() => navigation.navigate('ProfileModal')}>
             <Icon name="edit" color="white" style={styles.edit} />
           </TouchableOpacity>
-          <Card.Image
-            source={{uri: 'https://placekitten.com/300/300'}}
-            style={styles.image}
-          />
+          <UploadImage />
           <ListItem containerStyle={styles.listItem}>
             <ListItem.Title style={styles.listItemTitle}>
               @{user.username}
