@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Card, Text, Icon, Image} from '@rneui/themed';
-import {Video, ResizeMode} from 'expo-av';
 import {
   ScrollView,
   KeyboardAvoidingView,
@@ -127,24 +126,7 @@ const Single = ({route}: any) => {
                   Recipe Details:
                 </Text>
                 <Text style={{color: 'white', fontSize: 16}}>
-                  Ingredients:
-                  {'\n'}- 2 cups flour
-                  {'\n'}- 1 tsp baking powder
-                  {'\n'}- 1/2 tsp salt
-                  {'\n'}- 3/4 cup unsalted butter
-                  {'\n'}- 1 cup sugar
-                  {'\n'}- 2 eggs
-                  {'\n'}- 2 tsp vanilla extract
-                  {'\n\n'}
-                  Instructions:
-                  {'\n'}1. Preheat your oven to 350°F (175°C).
-                  {'\n'}2. Mix flour, baking powder, and salt in a bowl.
-                  {'\n'}3. In a separate bowl, beat butter and sugar until
-                  fluffy. Add eggs and vanilla, mixing well.
-                  {'\n'}4. Gradually blend in the dry ingredients. Stir until
-                  well combined.
-                  {'\n'}5. Bake for 25-30 minutes, or until golden.
-                  {'\n'}6. Let cool and serve.
+                  Ingredients: {item.description}
                 </Text>
               </View>
             )}
