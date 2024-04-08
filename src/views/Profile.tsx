@@ -20,6 +20,9 @@ const Profile = () => {
     <>
       {user && (
         <ScrollView contentContainerStyle={styles.container}>
+          <TouchableOpacity onPress={() => navigation.navigate('ProfileModal')}>
+            <Icon name="edit" color="white" style={styles.edit} />
+          </TouchableOpacity>
           <Card.Image
             source={{uri: 'https://placekitten.com/300/300'}}
             style={styles.image}
@@ -68,7 +71,7 @@ const Profile = () => {
           </View>
           <TouchableOpacity style={styles.button} onPress={handleLogout}>
             <Text style={styles.buttonText}>Logout</Text>
-            <Icon name="logout" color="#86934f" />
+            <Icon name="logout" color="black" />
           </TouchableOpacity>
         </ScrollView>
       )}
@@ -84,6 +87,8 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#7EAA92',
   },
+  edit: {
+  },
   image: {
     width: 150,
     height: 150,
@@ -96,10 +101,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#0a1c13',
   },
   listItem: {
-    backgroundColor: '#0a1c13',
+    backgroundColor: '#7EAA92',
   },
   listItemTitle: {
-    backgroundColor: '#0a1c13',
+    backgroundColor: '#7EAA92',
     color: 'white',
   },
   stats: {
@@ -107,7 +112,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   button: {
-    backgroundColor: '#C8E4B2',
+    backgroundColor: '#7EAA92',
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
