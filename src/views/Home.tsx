@@ -23,7 +23,7 @@ const Home = ({navigation}: {navigation: NavigationProp<ParamListBase>}) => {
             borderBottomColor: 'transparent',
             borderTopColor: 'transparent',
           }}
-          inputContainerStyle={{backgroundColor: colors.mossgreen}}
+          inputContainerStyle={{backgroundColor: colors.sage}}
           inputStyle={{color: colors.darkgreen, fontSize: 20}}
           placeholderTextColor={colors.darkgreen}
           onBlur={undefined}

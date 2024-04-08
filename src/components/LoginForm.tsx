@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#7EAA92',
     color: 'black',
     alignItems: 'center',
-    fontSize: 20,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 });
 

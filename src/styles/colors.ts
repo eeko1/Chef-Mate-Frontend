@@ -1,8 +1,8 @@
 export default {
   darkgreen: '#0A1C13',
-  lightgreen: '#144B29',
+  lightgreen: '#7EAA92',
   mossgreen: '#86934F',
-  sage: '#D0D09B',
+  sage: '#C8E4B2',
   blue: '#ACCBED',
   text: '#FEF5F5',
 };
