@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   StyleSheet,
+  View,
 } from 'react-native';
 import {Video} from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -102,7 +103,6 @@ const Upload = () => {
             />
           ) : (
             <>
-              <Text style={styles.title}>Chef Mate</Text>
               <Card.Image
                 onPress={pickImage}
                 style={styles.image}
@@ -140,6 +140,12 @@ const Upload = () => {
           <Text style={styles.label}>Ingredients</Text>
           <Controller
             control={control}
+            rules={{
+              maxLength: {
+                value: 1000,
+                message: 'Instructions cannot exceed 1000 characters',
+              },
+            }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
                 placeholder=""
@@ -177,15 +183,22 @@ const Upload = () => {
             )}
             name="description"
           />
+                   <Card.Divider />
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Reset"
+              onPress={resetForm}
+              buttonStyle={styles.resetButton}
+              containerStyle={styles.buttonTop}
+            />
+            <Button
+              title="Upload"
+              onPress={handleSubmit(doUpload)}
+              buttonStyle={styles.uploadButton}
+              containerStyle={styles.buttonBottom}
+            />
+          </View>
           <Card.Divider />
-          <Button
-            title="Upload"
-            onPress={handleSubmit(doUpload)}
-            buttonStyle={styles.uploadButton}
-            titleStyle={styles.uploadButtonText}
-          />
-          <Card.Divider />
-          <Button title="Reset" onPress={resetForm} />
         </Card>
       </TouchableOpacity>
     </ScrollView>
@@ -194,14 +207,14 @@ const Upload = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.darkgreen,
+    backgroundColor: colors.lightgreen,
   },
   touchable: {
     flex: 1,
-    backgroundColor: colors.darkgreen,
+    backgroundColor: colors.lightgreen,
   },
   cardContainer: {
-    backgroundColor: colors.darkgreen,
+    backgroundColor: colors.lightgreen,
     borderWidth: 0,
     shadowColor: 'transparent',
     paddingHorizontal: 20,
@@ -209,40 +222,42 @@ const styles = StyleSheet.create({
   video: {
     height: 300,
   },
-  title: {
-    fontSize: 30,
-    fontFamily: 'Lobster-Regular',
-    marginBottom: 15,
-    textAlign: 'center',
-    color: colors.text,
-  },
   image: {
     aspectRatio: 1,
     height: 300,
   },
   label: {
-    fontSize: 20,
+    fontSize: 15,
     marginBottom: 5,
     color: colors.text,
   },
   inputContainer: {
-    backgroundColor: colors.lemon,
+    backgroundColor: colors.sage,
     borderBottomWidth: 0,
   },
   inputContainerLarge: {
-    backgroundColor: colors.lemon,
+    backgroundColor: colors.sage,
     borderBottomWidth: 0,
     minHeight: 100,
   },
   inputContainerStyle: {
     paddingHorizontal: 0,
   },
-  uploadButton: {
-    borderColor: colors.darkgreen,
-    backgroundColor: colors.lemon,
+  buttonContainer: {
+    marginTop: 10,
   },
-  uploadButtonText: {
-    color: colors.mossgreen,
+  buttonTop: {
+    marginBottom: 10,
+  },
+  buttonBottom: {
+    marginTop: 0,
+  },
+  resetButton: {
+    backgroundColor: colors.sage,
+  },
+  uploadButton: {
+    backgroundColor: colors.sage,
+    color: colors.text,
   },
 });
 

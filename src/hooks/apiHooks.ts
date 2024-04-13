@@ -65,6 +65,7 @@ const useMedia = () => {
       'media_id' | 'user_id' | 'thumbnail' | 'created_at'
     > = {
       title: inputs.title,
+      ingredients: inputs.ingredients,
       description: inputs.description,
       filename: file.data.filename,
       filesize: file.data.filesize,

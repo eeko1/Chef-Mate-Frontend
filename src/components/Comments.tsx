@@ -67,7 +67,7 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
 
   return (
     <>
-      <Card containerStyle={{backgroundColor: colors.darkgreen}}>
+      <Card containerStyle={{backgroundColor: colors.sage}}>
         <Card.Title style={{color: colors.text}}>Reviews</Card.Title>
 
         {comments.length > 0 ? (
@@ -75,7 +75,7 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
             <View
               key={index}
               style={{
-                backgroundColor: colors.mossgreen,
+                backgroundColor: colors.sage,
                 marginBottom: 10,
                 padding: 8,
                 borderRadius: 5,
@@ -120,7 +120,7 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
                   placeholder="Write a review"
                   multiline={true}
                   inputStyle={{
-                    backgroundColor: colors.mossgreen,
+                    backgroundColor: colors.comment,
                     color: colors.text,
                   }}
                   placeholderTextColor={colors.text}
@@ -131,7 +131,7 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
             <Button
               onPress={handleSubmit(doComment)}
               title={'Post'}
-              buttonStyle={{backgroundColor: colors.mossgreen, marginTop: 10}}
+              buttonStyle={{backgroundColor: colors.comment, marginTop: 10}}
               titleStyle={{color: colors.text}}
             />
           </>

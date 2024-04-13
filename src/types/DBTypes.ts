@@ -24,6 +24,7 @@ type MediaItem = {
   filesize: number;
   media_type: string;
   title: string;
+  ingredients: string | null;
   description: string | null;
   created_at: Date | string;
 };
@@ -89,6 +90,7 @@ type MostLikedMedia = Pick<
   | 'media_type'
   | 'title'
   | 'description'
+  | 'ingredients'
   | 'created_at'
 > &
   Pick<User, 'user_id' | 'username' | 'email' | 'created_at'> & {
