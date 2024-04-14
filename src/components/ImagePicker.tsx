@@ -8,23 +8,33 @@ export default function UploadImage() {
   );
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.6,
-    });
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.6,
+      });
 
-    if (!result.canceled) {
-      setImage(result);
+      console.log('Image picker result:', result);
+
+      if (!result.canceled) {
+        setImage(result);
+      } else {
+        console.log('Image selection cancelled.');
+      }
+    } catch (error) {
+      console.log('Error picking image: ', error);
     }
   };
 
   return (
     <View style={imageUploaderStyles.container}>
-      {image && !image.canceled && (
-        <Image source={{uri: image.uri}} style={{width: 200, height: 200}} />
+      {image && (
+        <Image
+          source={{uri: image.assets[0].uri}}
+          style={{width: 200, height: 200}}
+        />
       )}
       <View style={imageUploaderStyles.uploadBtnContainer}>
         <TouchableOpacity
