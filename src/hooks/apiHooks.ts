@@ -103,7 +103,43 @@ const useMedia = () => {
     );
   };
 
-  return {mediaArray, postMedia, putMedia};
+  const updateUserProfile = (
+    userId: number,
+    profileData: Partial<User>,
+    token: string,
+  ) => {
+    // Create an object representing the user profile data to update
+    const updatedProfile: Partial<User> = {
+      username: profileData.username,
+      email: profileData.email,
+      // Add other properties as needed (e.g., password)
+      // Note: We assume profile picture data is included in profileData
+      profile_picture_filename: profileData.profile_picture_filename,
+      profile_picture_filesize: profileData.profile_picture_filesize,
+      profile_picture_media_type: profileData.profile_picture_media_type,
+      profile_picture_url: profileData.profile_picture_url,
+    };
+
+    // Create the request body
+    const requestBody = JSON.stringify(updatedProfile);
+
+    // Send a PUT request to update the user profile
+    const options = {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: requestBody,
+    };
+
+    return fetchData<User>(
+      `${process.env.EXPO_PUBLIC_API}/users/${userId}`,
+      options,
+    );
+  };
+
+  return {mediaArray, postMedia, putMedia, updateUserProfile};
 };
 
 const useUser = () => {
