@@ -106,7 +106,7 @@ type UserWithNoPassword = Omit<UserWithLevel, 'password'>;
 type TokenContent = Pick<User, 'user_id'> & Pick<UserLevel, 'level_name'>;
 
 // for REST API
-type MediaItemWithOwner = MediaItem & Pick<User, 'username'>;
+type MediaItemWithOwner = MediaItem & Pick<User, 'username'> & {likes: Like[]};
 
 // FOR GRAPHQL
 // type MediaItemWithOwner = MediaItem & {
