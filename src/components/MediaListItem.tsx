@@ -1,6 +1,6 @@
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
-import {Card, Icon, ListItem, Button} from '@rneui/base';
+import {Card, Icon, Button} from '@rneui/base';
 import moment from 'moment';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';

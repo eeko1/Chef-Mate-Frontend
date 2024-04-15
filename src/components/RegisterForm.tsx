@@ -2,7 +2,6 @@ import {Controller, useForm} from 'react-hook-form';
 import {Card, Input} from '@rneui/base';
 import {Alert, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {useUser} from '../hooks/apiHooks';
-import UploadImage from './ImagePicker';
 
 const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
   const {postUser, getUsernameAvailable, getEmailAvailable} = useUser();

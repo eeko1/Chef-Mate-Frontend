@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {Image, View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import {useMedia} from '../hooks/apiHooks';
 
 export default function UploadImage() {
   const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(
     null,
   );
+  const {updateUserProfile} = useMedia();
 
   const pickImage = async () => {
     try {
@@ -18,8 +20,16 @@ export default function UploadImage() {
 
       console.log('Image picker result:', result);
 
-      if (!result.canceled) {
+      if (!result.canceled && result.uri) {
         setImage(result);
+        // Derive media type from the file extension in the URI
+        const mediaType = result.uri.split('.').pop();
+        await updateUserProfile({
+          profile_picture_filename: result.assets[0].fileName,
+          profile_picture_filesize: result.assets[0].fileSize,
+          profile_picture_media_type: mediaType,
+          profile_picture_url: result.assets[0].uri,
+        });
       } else {
         console.log('Image selection cancelled.');
       }
