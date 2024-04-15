@@ -91,7 +91,7 @@ const MediaListItem = ({item, navigation}: Props) => {
           <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
             {user && user.user_id === item.user_id ? (
               <>
-                <Button
+                {/*  <Button
                   onPress={() => {
                     navigation.navigate('Modify', item);
                   }}
@@ -106,7 +106,7 @@ const MediaListItem = ({item, navigation}: Props) => {
                 >
                   {' '}
                   <Icon type="ionicon" name="trash" color="white" />
-                </Button>
+                </Button> */}
               </>
             ) : (
               <TouchableOpacity
