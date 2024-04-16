@@ -2,6 +2,7 @@ import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {Card, Icon, ListItem, Button} from '@rneui/base';
 import moment from 'moment';
+import React, {useState} from 'react';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
@@ -13,6 +14,39 @@ type Props = {
 
 const MediaListItem = ({item, navigation}: Props) => {
   const {user} = useUserContext();
+  const [likes, setLikes] = useState(item.likes ? item.likes.length : 0);
+
+  const handleLike = async () => {
+    try {
+      console.log('item.media_id:', item.media_id);
+      console.log('user.user_id:', user.user_id);
+      console.log('item', item);
+      console.log(`${process.env.EXPO_PUBLIC_MEDIA_API}/likes/`);
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_MEDIA_API}/likes/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            media_id: item.media_id,
+            user_id: user.user_id,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const responseBody = await response.json();
+        console.log('Server response', responseBody);
+        throw new Error('Error liking the post');
+      }
+
+      setLikes(likes + 1);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={{paddingBottom: 70}}>
       <Card
@@ -71,10 +105,13 @@ const MediaListItem = ({item, navigation}: Props) => {
               }}
             >
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icon type="ionicon" name="heart" color="red" />
-                <Text style={{color: colors.blue, fontSize: 20}}>
-                  {item.likes ? item.likes.length : ' ' + 0}
-                </Text>
+                <Icon
+                  type="ionicon"
+                  name="heart"
+                  color="red"
+                  onPress={handleLike}
+                />
+                <Text style={{color: colors.blue, fontSize: 20}}>{likes}</Text>
               </View>
               <Card.Title
                 style={{

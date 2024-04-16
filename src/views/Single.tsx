@@ -69,7 +69,7 @@ const Single = ({route}: any) => {
             >
               <Icon type="ionicon" name="heart" color="red" />
               <Text style={{color: colors.blue, fontSize: 20}}>
-                {item.Likes ? item.Likes.length : ' ' + 0}
+                {item.likes ? item.likes.length : ' ' + 0}
               </Text>
               <Text style={{color: colors.text, marginLeft: 10, fontSize: 20}}>
                 {item.title}
