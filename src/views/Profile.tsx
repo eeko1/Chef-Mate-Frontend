@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Icon, ListItem} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import {Input} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
 import UploadImage from '../components/ImagePicker';
@@ -33,14 +34,12 @@ const Profile = () => {
 
   const {putUser, getEmailAvailable} = useUser();
 
-  const onSubmit = async (
-    data: {username: string; email: string},
-    token: string,
-  ) => {
+  const onSubmit = async (data) => {
     try {
+      const token = await AsyncStorage.getItem('token');
       const inputs: Pick<User, 'username' | 'email'> = {
-        username: data.username,
-        email: data.email,
+        username: data.username || user.username,
+        email: data.email || user.email,
       };
 
       await putUser(user.user_id, inputs, token);

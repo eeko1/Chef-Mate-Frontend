@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import * as FileSystem from 'expo-file-system';
+import * as ImagePicker from 'expo-image-picker';
 import {
   Comment,
   Like,
@@ -103,7 +104,43 @@ const useMedia = () => {
     );
   };
 
-  return {mediaArray, postMedia, putMedia};
+  const postProfilePic = (
+    file: ImagePicker.ImagePickerAsset,
+    token: string,
+  ) => {
+    // Extract necessary information from the ImagePickerAsset object
+    const media: Pick<
+      User,
+      | 'profile_picture_filename'
+      | 'profile_picture_filesize'
+      | 'profile_picture_media_type'
+      | 'profile_picture_url'
+    > = {
+      profile_picture_filename: file.fileName,
+      profile_picture_filesize: file.fileSize,
+      profile_picture_media_type: file.mediaType,
+      profile_picture_url: file.uri,
+    };
+
+    // Prepare the request options
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(media),
+    };
+
+    // Perform the API request
+    return fetchData<MediaResponse>(
+      process.env.EXPO_PUBLIC_MEDIA_API + '/media',
+      options,
+    );
+  };
+
+
+  return {mediaArray, postMedia, putMedia, postProfilePic};
 };
 
 const useUser = () => {

@@ -1,4 +1,4 @@
-import { MediaItem, UserWithNoPassword } from './DBTypes';
+import {MediaItem, UserWithNoPassword} from './DBTypes';
 
 type MessageResponse = {
   message: string;
@@ -41,6 +41,10 @@ type UploadResponse = MessageResponse & {
     filename: string;
     media_type: string;
     filesize: number;
+    profile_picture_filename: string;
+    profile_picture_filesize: number;
+    profile_picture_media_type: string;
+    profile_picture_url: string;
   };
 };
 
