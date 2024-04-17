@@ -31,9 +31,20 @@ const MediaListItem = ({item, navigation}: Props) => {
     try {
       //Get token from async storage
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_MEDIA_API}/likes/`,
-        {
+      let response;
+      if (userHasLiked) {
+        response = await fetch(
+          `${process.env.EXPO_PUBLIC_MEDIA_API}/likes/${item.media_id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + token,
+            },
+          },
+        );
+      } else {
+        response = await fetch(`${process.env.EXPO_PUBLIC_MEDIA_API}/likes/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -43,17 +54,17 @@ const MediaListItem = ({item, navigation}: Props) => {
             media_id: item.media_id,
             user_id: user.user_id,
           }),
-        },
-      );
+        });
+      }
 
       if (!response.ok) {
         const responseBody = await response.json();
         console.log('Server response', responseBody);
-        throw new Error('Error liking the post');
+        throw new Error('Error liking/unliking the post');
       }
 
-      setLikes(likes + 1);
-      setUserHasLiked(true);
+      setLikes(userHasLiked ? likes - 1 : likes + 1);
+      setUserHasLiked(!userHasLiked);
     } catch (error) {
       console.error(error);
     }
