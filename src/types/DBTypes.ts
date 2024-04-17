@@ -99,7 +99,7 @@ type MostLikedMedia = Pick<
 type UserWithLevel = Omit<User, 'user_level_id'> &
   Pick<UserLevel, 'level_name'>;
 
-type UserWithNoPassword = Omit<UserWithLevel, 'password'>;
+type UserWithNoPassword = Omit<UserWithLevel, 'password'> & {token: string};
 
 type TokenContent = Pick<User, 'user_id'> & Pick<UserLevel, 'level_name'>;
 

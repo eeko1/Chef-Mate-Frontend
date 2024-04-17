@@ -2,7 +2,8 @@ import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {Card, Icon, ListItem, Button} from '@rneui/base';
 import moment from 'moment';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
@@ -15,19 +16,28 @@ type Props = {
 const MediaListItem = ({item, navigation}: Props) => {
   const {user} = useUserContext();
   const [likes, setLikes] = useState(item.likes ? item.likes.length : 0);
+  const [userHasLiked, setUserHasLiked] = useState(false);
+
+  useEffect(() => {
+    if (
+      item.likes &&
+      item.likes.some((like) => like.user_id === user.user_id)
+    ) {
+      setUserHasLiked(true);
+    }
+  }, []);
 
   const handleLike = async () => {
     try {
-      console.log('item.media_id:', item.media_id);
-      console.log('user.user_id:', user.user_id);
-      console.log('item', item);
-      console.log(`${process.env.EXPO_PUBLIC_MEDIA_API}/likes/`);
+      //Get token from async storage
+      const token = await AsyncStorage.getItem('token');
       const response = await fetch(
         `${process.env.EXPO_PUBLIC_MEDIA_API}/likes/`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token,
           },
           body: JSON.stringify({
             media_id: item.media_id,
@@ -43,6 +53,7 @@ const MediaListItem = ({item, navigation}: Props) => {
       }
 
       setLikes(likes + 1);
+      setUserHasLiked(true);
     } catch (error) {
       console.error(error);
     }
@@ -107,7 +118,7 @@ const MediaListItem = ({item, navigation}: Props) => {
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Icon
                   type="ionicon"
-                  name="heart"
+                  name={userHasLiked ? 'heart-dislike' : 'heart'}
                   color="red"
                   onPress={handleLike}
                 />
