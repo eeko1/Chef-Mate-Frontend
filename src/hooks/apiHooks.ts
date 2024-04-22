@@ -276,6 +276,54 @@ const useLike = () => {
   return {postLike, deleteLike, getCountByMediaId, getUserLike};
 };
 
+const useFollow = () => {
+  const postFollow = async (followed_id: number, token: string) => {
+    // Send a POST request to /follows with object { followed_id } and the token in the Authorization header.
+    const options: RequestInit = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({followed_id}),
+    };
+
+    return await fetchData<MessageResponse>(
+      process.env.EXPO_PUBLIC_AUTH_API + '/follows',
+      options,
+    );
+  };
+
+  const deleteFollow = async (followed_id: number, token: string) => {
+    // Send a DELETE request to /follows/:follow_id with the token in the Authorization header.
+    const options: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    return await fetchData<MessageResponse>(
+      process.env.EXPO_PUBLIC_AUTH_API + '/follows/' + followed_id,
+      options,
+    );
+  };
+
+  const getUserFollow = async (followed_id: number, token: string) => {
+    // Send a GET request to /follows/user/:followed_id to get the user's follow on the user.
+    const options: RequestInit = {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    return await fetchData<MessageResponse>(
+      process.env.EXPO_PUBLIC_AUTH_API + '/follows/user/' + followed_id,
+      options,
+    );
+  };
+  return {postFollow, deleteFollow, getUserFollow};
+};
+
 const useComment = () => {
   const postComment = async (
     comment_text: string,
@@ -372,6 +420,7 @@ export {
   useAuthentication,
   useFile,
   useLike,
+  useFollow,
   useComment,
   useRating,
 };
