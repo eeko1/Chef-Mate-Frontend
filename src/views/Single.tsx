@@ -26,6 +26,7 @@ const Single = ({route}: any) => {
   const [userHasLiked, setUserHasLiked] = useState(false);
   const {user} = useUserContext();
 
+  // LIKE USEEFFECT
   useEffect(() => {
     if (
       item.likes &&
