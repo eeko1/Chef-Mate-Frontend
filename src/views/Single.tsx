@@ -46,8 +46,8 @@ const Single = ({route}: any) => {
 
             <View style={styles.likesSection}>
               <Icon type="ionicon" name="heart" color="red" />
-              <Text style={styles.likesText}>
-                {item.Likes ? item.Likes.length : ' ' + 0}
+              <Text style={{color: colors.blue, fontSize: 20}}>
+                {item.likes ? item.likes.length : ' ' + 0}
               </Text>
               <Text style={styles.titleText}>{item.title}</Text>
             </View>

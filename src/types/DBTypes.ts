@@ -101,12 +101,21 @@ type MostLikedMedia = Pick<
 type UserWithLevel = Omit<User, 'user_level_id'> &
   Pick<UserLevel, 'level_name'>;
 
-type UserWithNoPassword = Omit<UserWithLevel, 'password'>;
+type UserWithNoPassword = Omit<UserWithLevel, 'password'> & {token: string};
 
 type TokenContent = Pick<User, 'user_id'> & Pick<UserLevel, 'level_name'>;
 
 // for REST API
-type MediaItemWithOwner = MediaItem & Pick<User, 'username'> & {likes: Like[]};
+type MediaItemWithOwner = MediaItem &
+  Pick<User, 'username'> & {
+    likes: Like[];
+    id?: number;
+    tags?: Tag[];
+    ratings?: Rating[];
+    likes_count: number;
+    average_rating?: number;
+    comments_count: number;
+  };
 
 // FOR GRAPHQL
 // type MediaItemWithOwner = MediaItem & {

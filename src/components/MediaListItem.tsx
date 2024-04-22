@@ -2,6 +2,8 @@ import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {Card, Icon, ListItem, Button} from '@rneui/base';
 import moment from 'moment';
+import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
@@ -13,6 +15,60 @@ type Props = {
 
 const MediaListItem = ({item, navigation}: Props) => {
   const {user} = useUserContext();
+  const [likes, setLikes] = useState(item.likes ? item.likes.length : 0);
+  const [userHasLiked, setUserHasLiked] = useState(false);
+
+  useEffect(() => {
+    if (
+      item.likes &&
+      item.likes.some((like) => like.user_id === user.user_id)
+    ) {
+      setUserHasLiked(true);
+    }
+  }, []);
+
+  const handleLike = async () => {
+    try {
+      //Get token from async storage
+      const token = await AsyncStorage.getItem('token');
+      let response;
+      if (userHasLiked) {
+        response = await fetch(
+          `${process.env.EXPO_PUBLIC_MEDIA_API}/likes/${item.media_id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + token,
+            },
+          },
+        );
+      } else {
+        response = await fetch(`${process.env.EXPO_PUBLIC_MEDIA_API}/likes/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token,
+          },
+          body: JSON.stringify({
+            media_id: item.media_id,
+            user_id: user.user_id,
+          }),
+        });
+      }
+
+      if (!response.ok) {
+        const responseBody = await response.json();
+        console.log('Server response', responseBody);
+        throw new Error('Error liking/unliking the post');
+      }
+
+      setLikes(userHasLiked ? likes - 1 : likes + 1);
+      setUserHasLiked(!userHasLiked);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={{paddingBottom: 70}}>
       <Card
@@ -71,10 +127,13 @@ const MediaListItem = ({item, navigation}: Props) => {
               }}
             >
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icon type="ionicon" name="heart" color="red" />
-                <Text style={{color: colors.blue, fontSize: 20}}>
-                  {item.likes ? item.likes.length : ' ' + 0}
-                </Text>
+                <Icon
+                  type="ionicon"
+                  name={userHasLiked ? 'heart-dislike' : 'heart'}
+                  color="red"
+                  onPress={handleLike}
+                />
+                <Text style={{color: colors.blue, fontSize: 20}}>{likes}</Text>
               </View>
               <Card.Title
                 style={{
