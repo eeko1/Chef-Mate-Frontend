@@ -10,13 +10,18 @@ import {
   TouchableOpacity,
   Text,
   View,
+  FlatList,
 } from 'react-native';
+import React, {useState} from 'react';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
+import MyFiles from './MyFiles';
 
 const Profile = () => {
   const {handleLogout, user} = useUserContext();
   const navigation: NavigationProp<ParamListBase> = useNavigation();
+  const [view, setView] = useState<'My posts' | 'My saved posts'>('My posts');
+
   return (
     <>
       {user && (
@@ -61,15 +66,24 @@ const Profile = () => {
             <Card.Divider />
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('My Files')}
+              onPress={() => setView('My posts')}
             >
               <Text style={styles.buttonText}>My Posts</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setView('My saved posts')}
+            >
               <Text style={styles.buttonText}>My saved posts</Text>
             </TouchableOpacity>
             <Card.Divider />
           </View>
+          {view === 'My posts' && <MyFiles navigation={navigation} />}
+          {view === 'My saved posts' && (
+            <View>
+              <Text>My saved posts</Text>
+            </View>
+          )}
           <TouchableOpacity style={styles.button} onPress={handleLogout}>
             <Text style={styles.buttonText}>Logout</Text>
             <Icon name="logout" color="black" />
@@ -88,8 +102,7 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#7EAA92',
   },
-  edit: {
-  },
+  edit: {},
   image: {
     width: 150,
     height: 150,

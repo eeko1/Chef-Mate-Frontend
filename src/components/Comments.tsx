@@ -67,8 +67,8 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
 
   return (
     <>
-      <Card containerStyle={{backgroundColor: colors.sage}}>
-        <Card.Title style={{color: colors.text}}>Reviews</Card.Title>
+      <Card containerStyle={{backgroundColor: colors.sage, borderRadius: 5}}>
+        <Card.Title style={{color: colors.text, fontSize: 18}}>Reviews</Card.Title>
 
         {comments.length > 0 ? (
           comments.map((comment, index) => (
@@ -99,10 +99,8 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
 
         {user && (
           <>
-            <Card.Divider
-              style={{backgroundColor: colors.text, marginVertical: 10}}
-            />
-            <Card.Title style={{color: colors.text}}>Post Review</Card.Title>
+            <Card.Divider style={{backgroundColor: colors.text}} />
+            <Card.Title style={{color: colors.text, fontSize: 18}}>Post Review</Card.Title>
             <Controller
               control={control}
               rules={{
