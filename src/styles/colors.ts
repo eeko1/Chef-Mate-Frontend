@@ -3,7 +3,7 @@ export default {
   lightgreen: '#7EAA92',
   mossgreen: '#86934F',
   sage: '#C8E4B2',
-  blue: '#ACCBED',
-  text: '#FEF5F5',
-  comment: '#404040',
+  blue: 'black',
+  text: 'black',
+  comment: '#C8E4B2',
 };

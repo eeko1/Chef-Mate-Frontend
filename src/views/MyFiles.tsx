@@ -1,6 +1,7 @@
 import {FlatList, View} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {Text} from '@rneui/base';
+import React from 'react';
 import {useMedia} from '../hooks/apiHooks';
 import MediaListItem from '../components/MediaListItem';
 import {useUserContext} from '../hooks/ContextHooks';
@@ -19,14 +20,12 @@ const MyFiles = ({navigation}: {navigation: NavigationProp<ParamListBase>}) => {
   const myMedia = mediaArray.filter((item) => item.user_id === user.user_id);
 
   return (
-    <>
-      <FlatList
-        data={myMedia}
-        renderItem={({item}) => (
-          <MediaListItem navigation={navigation} item={item} />
-        )}
-      />
-    </>
+    <FlatList
+      data={myMedia}
+      renderItem={({item}) => (
+        <MediaListItem navigation={navigation} item={item} />
+      )}
+    />
   );
 };
 

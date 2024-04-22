@@ -51,33 +51,32 @@ const Single = ({route}: any) => {
               </Text>
               <Text style={styles.titleText}>{item.title}</Text>
             </View>
-            <Text style={styles.ingredientsText}>{item.ingredients}</Text>
             <Ratings item={item} size={35} />
             <View style={styles.tabsContainer}>
               <TouchableOpacity
                 onPress={() => setView('reviews')}
                 style={styles.tabButton}
               >
-                <Text>Reviews</Text>
+                <Text style={{fontWeight: 'bold'}}>Recipe Details</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setView('details')}
                 style={styles.tabButton}
               >
-                <Text>Recipe Details</Text>
+                <Text style={{fontWeight: 'bold'}}>Reviews</Text>
               </TouchableOpacity>
             </View>
-            {view === 'reviews' && (
+            {view === 'details' && (
               <View>
                 <Comments item={item} />
               </View>
             )}
-            {view === 'details' && (
+            {view === 'reviews' && (
               <View style={styles.detailsContainer}>
-                <Text style={styles.detailsHeaderText}>Recipe Details:</Text>
-                <Text style={styles.detailsText}>
-                  Instructions: {item.description}
-                </Text>
+                <Text style={styles.ingredinetsHeaderText}>Ingredients:</Text>
+                <Text style={styles.detailsText}>{item.ingredients}</Text>
+                <Text style={styles.detailsHeaderText}>Instructions:</Text>
+                <Text style={styles.detailsText}>{item.description}</Text>
               </View>
             )}
           </Card>
@@ -118,6 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: -20,
+    marginBottom: 20
   },
   likesText: {
     color: colors.blue,
@@ -156,14 +156,22 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   detailsHeaderText: {
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     paddingBottom: 10,
+    paddingTop: 10,
+    fontWeight: 'bold',
   },
   detailsText: {
-    color: 'white',
+    color: 'black',
     fontSize: 16,
   },
+  ingredinetsHeaderText: {
+    color: 'black',
+    fontSize: 18,
+    paddingBottom: 10,
+    fontWeight: 'bold',
+  }
 });
 
 export default Single;

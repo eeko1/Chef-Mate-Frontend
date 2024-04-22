@@ -17,6 +17,7 @@ import {
   ParamListBase,
   useNavigation,
 } from '@react-navigation/native';
+import React from 'react';
 import {useFile, useMedia} from '../hooks/apiHooks';
 import {useUpdateContext} from '../hooks/UpdateHook';
 import colors from '../styles/colors';
@@ -183,7 +184,7 @@ const Upload = () => {
             )}
             name="description"
           />
-                   <Card.Divider />
+          <Card.Divider />
           <View style={styles.buttonContainer}>
             <Button
               title="Reset"
@@ -225,6 +226,7 @@ const styles = StyleSheet.create({
   image: {
     aspectRatio: 1,
     height: 300,
+    borderRadius: 10,
   },
   label: {
     fontSize: 15,
@@ -234,17 +236,23 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: colors.sage,
     borderBottomWidth: 0,
+    borderRadius: 10,
+    padding: 5,
   },
   inputContainerLarge: {
     backgroundColor: colors.sage,
     borderBottomWidth: 0,
     minHeight: 100,
+    borderRadius: 10,
+    padding: 5,
   },
   inputContainerStyle: {
     paddingHorizontal: 0,
   },
   buttonContainer: {
     marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   buttonTop: {
     marginBottom: 10,
@@ -253,10 +261,10 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   resetButton: {
-    backgroundColor: colors.sage,
+    backgroundColor: colors.lightgreen,
   },
   uploadButton: {
-    backgroundColor: colors.sage,
+    backgroundColor: colors.lightgreen,
     color: colors.text,
   },
 });
