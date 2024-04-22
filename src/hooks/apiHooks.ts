@@ -109,18 +109,37 @@ const useMedia = () => {
     token: string,
   ) => {
     // Extract necessary information from the ImagePickerAsset object
-    const media: Pick<
-      User,
-      | 'profile_picture_filename'
-      | 'profile_picture_filesize'
-      | 'profile_picture_media_type'
-      | 'profile_picture_url'
-    > = {
-      profile_picture_filename: file.fileName,
-      profile_picture_filesize: file.fileSize,
-      profile_picture_media_type: file.mediaType,
-      profile_picture_url: file.uri,
+    const media: Pick<User, 'profile_picture_url'> = {
+      profile_picture_url: file.uri || null,
     };
+
+    const determineMediaType = (fileName: string | null): string => {
+      if (!fileName) {
+        // If fileName is null or undefined, return a default MIME type
+        return 'application/octet-stream';
+      }
+
+      // Get the file extension
+      const fileExtension = fileName.split('.').pop()?.toLowerCase();
+
+      // Map common file extensions to MIME types
+      const mimeTypeMap: {[extension: string]: string} = {
+        jpg: 'image/jpeg',
+        jpeg: 'image/jpeg',
+        png: 'image/png',
+        gif: 'image/gif',
+        // Add more mappings as needed
+      };
+
+      // Look up the MIME type based on the file extension
+      const mediaType = fileExtension && mimeTypeMap[fileExtension];
+
+      // Default to 'application/octet-stream' if MIME type is not found
+      return mediaType || 'application/octet-stream';
+    };
+
+    // If you need to determine media type based on file extension or content, you can do so here
+    const mediaType = determineMediaType(file.fileName); // Implement determineMediaType function
 
     // Prepare the request options
     const options = {
@@ -129,7 +148,7 @@ const useMedia = () => {
         Authorization: 'Bearer ' + token,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(media),
+      body: JSON.stringify({...media, profile_picture_media_type: mediaType}),
     };
 
     // Perform the API request
@@ -138,7 +157,6 @@ const useMedia = () => {
       options,
     );
   };
-
 
   return {mediaArray, postMedia, putMedia, postProfilePic};
 };
