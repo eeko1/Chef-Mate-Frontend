@@ -10,7 +10,7 @@ type User = {
   password: string;
   email: string;
   user_level_id: number;
- // profile_picture_filename?: string; // Optional profile picture filename
+  // profile_picture_filename?: string; // Optional profile picture filename
   //profile_picture_filesize?: number; // Optional profile picture filesize
   //profile_picture_media_type?: string; // Optional profile picture media type
   profile_picture_url?: string; // Optional profile picture URL
@@ -30,6 +30,7 @@ type MediaItem = {
   title: string;
   description: string | null;
   created_at: Date | string;
+  profile_picture_url?: string;
 };
 
 type Comment = {

@@ -113,34 +113,6 @@ const useMedia = () => {
       profile_picture_url: file.uri || null,
     };
 
-    const determineMediaType = (fileName: string | null): string => {
-      if (!fileName) {
-        // If fileName is null or undefined, return a default MIME type
-        return 'application/octet-stream';
-      }
-
-      // Get the file extension
-      const fileExtension = fileName.split('.').pop()?.toLowerCase();
-
-      // Map common file extensions to MIME types
-      const mimeTypeMap: {[extension: string]: string} = {
-        jpg: 'image/jpeg',
-        jpeg: 'image/jpeg',
-        png: 'image/png',
-        gif: 'image/gif',
-        // Add more mappings as needed
-      };
-
-      // Look up the MIME type based on the file extension
-      const mediaType = fileExtension && mimeTypeMap[fileExtension];
-
-      // Default to 'application/octet-stream' if MIME type is not found
-      return mediaType || 'application/octet-stream';
-    };
-
-    // If you need to determine media type based on file extension or content, you can do so here
-    const mediaType = determineMediaType(file.fileName); // Implement determineMediaType function
-
     // Prepare the request options
     const options = {
       method: 'POST',
@@ -148,12 +120,12 @@ const useMedia = () => {
         Authorization: 'Bearer ' + token,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({...media, profile_picture_media_type: mediaType}),
+      body: JSON.stringify(media),
     };
 
     // Perform the API request
-    return fetchData<MediaResponse>(
-      process.env.EXPO_PUBLIC_MEDIA_API + '/media',
+    return fetchData<User>(
+      process.env.EXPO_PUBLIC_AUTH_API + '/users',
       options,
     );
   };
@@ -222,7 +194,7 @@ const useUser = () => {
       body: JSON.stringify(inputs),
     };
 
-    await fetchData<UserResponse>(
+    await fetchData<User>(
       process.env.EXPO_PUBLIC_AUTH_API + '/users/' + user_id,
       options,
     );
