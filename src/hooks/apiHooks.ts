@@ -294,6 +294,13 @@ const useFollow = () => {
     );
   };
 
+  const getFollowCountByFollowedId = async (followed_id: number) => {
+    // Send a GET request to /follows/count/:followed_id to get the number of follows.
+    return await fetchData<{count: number}>(
+      process.env.EXPO_PUBLIC_AUTH_API + '/follows/count/' + followed_id,
+    );
+  }
+
   const deleteFollow = async (followed_id: number, token: string) => {
     // Send a DELETE request to /follows/:follow_id with the token in the Authorization header.
     const options: RequestInit = {
@@ -321,7 +328,7 @@ const useFollow = () => {
       options,
     );
   };
-  return {postFollow, deleteFollow, getUserFollow};
+  return {postFollow, deleteFollow, getUserFollow, getFollowCountByFollowedId};
 };
 
 const useComment = () => {

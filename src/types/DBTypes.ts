@@ -115,7 +115,10 @@ type TokenContent = Pick<User, 'user_id'> & Pick<UserLevel, 'level_name'>;
 // for REST API
 type MediaItemWithOwner = MediaItem & Pick<User, 'username'>;
 
-type UserIdWithFollow = User & Pick<UserFollow, 'follower_id' | 'followed_id'>;
+type UserIdWithFollow = {
+  userId: number;
+  followedId: number;
+};
 
 // FOR GRAPHQL
 // type MediaItemWithOwner = MediaItem & {

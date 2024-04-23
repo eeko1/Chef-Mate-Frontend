@@ -14,6 +14,7 @@ import {MediaItemWithOwner} from '../types/DBTypes';
 import Ratings from '../components/Ratings';
 import Comments from '../components/Comments';
 import Likes from '../components/Likes';
+import Follows from '../components/Follows';
 import colors from '../styles/colors';
 
 const Single = ({route}: any) => {
@@ -36,6 +37,7 @@ const Single = ({route}: any) => {
                 style={styles.profileImage}
               />
               <Text style={styles.usernameText}>@{item.username}</Text>
+              <Follows userId={item.user_id} followedId={item.user_id} />
             </View>
 
             <Card.Image
