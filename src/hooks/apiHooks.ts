@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import * as FileSystem from 'expo-file-system';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Comment,
   Like,
@@ -7,6 +8,8 @@ import {
   MediaItemWithOwner,
   Rating,
   User,
+  UserFollow,
+  UserWithNoPassword,
 } from '../types/DBTypes';
 import {fetchData} from '../lib/functions';
 import {Credentials} from '../types/LocalTypes';
@@ -110,7 +113,8 @@ const useMedia = () => {
 
 const useUser = () => {
   // TODO: implement network functions for auth server user endpoints
-  const getUserByToken = async (token: string) => {
+  const getUserByToken = async () => {
+    const token = await AsyncStorage.getItem('token');
     const options = {
       headers: {
         Authorization: 'Bearer ' + token,
@@ -278,28 +282,43 @@ const useLike = () => {
 
 const useFollow = () => {
   const postFollow = async (followed_id: number, token: string) => {
-    // Send a POST request to /follows with object { followed_id } and the token in the Authorization header.
-    const options: RequestInit = {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({followed_id}),
-    };
+    try {
+      // Send a POST request to /follows with object { followed_id } and the token in the Authorization header.
+      const options: RequestInit = {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({followed_id}),
+      };
 
-    return await fetchData<MessageResponse>(
-      process.env.EXPO_PUBLIC_AUTH_API + '/follows',
-      options,
-    );
+      const result = await fetchData<MessageResponse>(
+        process.env.EXPO_PUBLIC_MEDIA_API + '/follows',
+        options,
+      );
+      console.log('postFollow', result);
+      if (result) {
+        return result;
+      }
+    } catch (e) {
+      console.log('postFollow error', (e as Error).message);
+    }
   };
 
   const getFollowCountByFollowedId = async (followed_id: number) => {
     // Send a GET request to /follows/count/:followed_id to get the number of follows.
-    return await fetchData<{count: number}>(
-      process.env.EXPO_PUBLIC_AUTH_API + '/follows/count/' + followed_id,
-    );
-  }
+    try {
+      const result = await fetchData<number>(
+        process.env.EXPO_PUBLIC_MEDIA_API + '/follows/count/' + followed_id,
+      );
+      if (result) {
+        return result;
+      }
+    } catch (e) {
+      console.log('getFollowCountByFollowedId error', (e as Error).message);
+    }
+  };
 
   const deleteFollow = async (followed_id: number, token: string) => {
     // Send a DELETE request to /follows/:follow_id with the token in the Authorization header.
@@ -309,24 +328,31 @@ const useFollow = () => {
         Authorization: 'Bearer ' + token,
       },
     };
+    console.log('followed_id', followed_id);
     return await fetchData<MessageResponse>(
-      process.env.EXPO_PUBLIC_AUTH_API + '/follows/' + followed_id,
+      process.env.EXPO_PUBLIC_MEDIA_API + '/follows/' + followed_id,
       options,
     );
   };
 
-  const getUserFollow = async (followed_id: number, token: string) => {
+  const getUserFollow = async (followed_id: number) => {
     // Send a GET request to /follows/user/:followed_id to get the user's follow on the user.
+    const token = await AsyncStorage.getItem('token');
     const options: RequestInit = {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + token,
       },
     };
-    return await fetchData<MessageResponse>(
-      process.env.EXPO_PUBLIC_AUTH_API + '/follows/user/' + followed_id,
+    const result = await fetchData<UserFollow>(
+      process.env.EXPO_PUBLIC_MEDIA_API + '/follows/count/user/' + followed_id,
       options,
     );
+    console.log('getUserFollow', result);
+    if (result) {
+      console.log('getUserFollow', result);
+      return result;
+    }
   };
   return {postFollow, deleteFollow, getUserFollow, getFollowCountByFollowedId};
 };

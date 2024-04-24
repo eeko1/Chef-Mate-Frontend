@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {UserFollow, UserIdWithFollow} from '../types/DBTypes';
 import {useFollow} from '../hooks/apiHooks';
@@ -47,18 +47,13 @@ const Follows = ({userId, followedId}: UserIdWithFollow) => {
 
   // get user follow
   const getFollows = async () => {
-    const token = await AsyncStorage.getItem('token');
-    if (!userId || !followedId || !token) {
+    if (!userId) {
       return;
     }
     try {
-      const userFollow: UserFollow = {
-        follower_id: 0,
-        followed_id: 0,
-        user_id: 0,
-        created_at: '',
-      };
-      followDispatch({type: 'follow', follow: userFollow});
+      const followResponse = await getUserFollow(followedId);
+
+      followDispatch({type: 'follow', follow: followResponse});
     } catch (e) {
       console.log('get user like error', (e as Error).message);
     }
@@ -68,7 +63,7 @@ const Follows = ({userId, followedId}: UserIdWithFollow) => {
   const getFollowCount = async () => {
     try {
       const countResponse = await getFollowCountByFollowedId(followedId);
-      followDispatch({type: 'setFollowCount', count: countResponse.count});
+      followDispatch({type: 'setFollowCount', count: countResponse});
     } catch (e) {
       followDispatch({type: 'setFollowCount', count: 0});
       console.log('get follow count error', (e as Error).message);
@@ -82,14 +77,19 @@ const Follows = ({userId, followedId}: UserIdWithFollow) => {
 
   const handleFollow = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = await AsyncStorage.getItem('token');
       if (!userId || !followedId || !token) {
         return;
       }
+      console.log('followedId', followedId, 'userId', userId);
+      if (followedId === userId) {
+        Alert.alert('You cannot follow yourself');
+      }
+
       // If user has already followed, then delete the follow, otherwise post the follow
-      if (followState.followUser) {
+      if (followState.followUser !== null) {
         // delete the follow and dispatch the new follow count to the state
-        await deleteFollow(Number(followState.followUser.follower_id), token);
+        await deleteFollow(Number(followState.followUser.followed_id), token);
         // dispaching is already done in the getFollows and getFollowCount functions
         // other way, is to do update locally after sucessful api call
         // for deleting it's ok because there is no need to get any data from the api
@@ -97,7 +97,9 @@ const Follows = ({userId, followedId}: UserIdWithFollow) => {
         followDispatch({type: 'follow', follow: null});
       } else {
         // post the follow and dispatch the new follow count to the state. Dispatching is already done in the getFollows and getFollowCount functions
-        await postFollow(Number(followedId), token);
+        console.log('followedId', followedId, 'token', token);
+        const result = await postFollow(Number(followedId), token);
+        console.log('result', result);
         getFollows();
         getFollowCount();
       }

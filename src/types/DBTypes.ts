@@ -61,9 +61,9 @@ type Rating = {
 };
 
 type UserFollow = {
+  userfollow_id: number;
   follower_id: number;
   followed_id: number;
-  user_id: number;
   created_at: Date | string;
 };
 
