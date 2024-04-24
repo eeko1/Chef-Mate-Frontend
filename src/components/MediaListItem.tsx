@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
+import AverageRating from './AverageRating';
 
 type Props = {
   item: MediaItemWithOwner;
@@ -178,12 +179,9 @@ const MediaListItem = ({item, navigation}: Props) => {
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{color: colors.blue, fontSize: 20}}>
-              Rating: {item.ratings ? item.ratings.length : 0} {' ('}
-              {/*TODO: add average rating*/}
-              {item.ratings ? item.ratings.length : 0}{' '}
+              Rating: <AverageRating item={item} />
             </Text>
             <Icon type="ionicon" name="star" color="yellow" />
-            <Text style={{color: colors.blue, fontSize: 20}}>)</Text>
           </View>
           <Text style={{paddingTop: 10, color: colors.blue}}>
             {moment(item.created_at).fromNow()}{' '}

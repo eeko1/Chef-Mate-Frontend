@@ -36,7 +36,13 @@ const Ratings = ({item, size}: {item: MediaItemWithOwner; size: number}) => {
   const fetchRating = async () => {
     try {
       const ratingResult = await getRatingByMediaId(item.media_id);
-      setAverageRating(ratingResult.average);
+      const average = Number(ratingResult.average);
+      if (isNaN(average)) {
+        console.log('Fetched average rating is not a number');
+        setAverageRating(0);
+      } else {
+        setAverageRating(average);
+      }
     } catch (error) {
       console.log((error as Error).message);
       setAverageRating(0);
