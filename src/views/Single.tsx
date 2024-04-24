@@ -13,13 +13,16 @@ import {
 import {MediaItemWithOwner} from '../types/DBTypes';
 import Ratings from '../components/Ratings';
 import Comments from '../components/Comments';
+import Follows from '../components/Follow';
 import Likes from '../components/Likes';
 import colors from '../styles/colors';
+import {useUserContext} from '../hooks/ContextHooks';
 
 const Single = ({route}: any) => {
   const item: MediaItemWithOwner = route.params;
   const [fileType, fileFormat] = item.media_type.split('&#x2F;');
   const [view, setView] = useState<'reviews' | 'details'>('reviews');
+  const {user} = useUserContext();
 
   return (
     <KeyboardAvoidingView
@@ -36,8 +39,8 @@ const Single = ({route}: any) => {
                 style={styles.profileImage}
               />
               <Text style={styles.usernameText}>@{item.username}</Text>
+              <Follows userId={user.user_id} followedId={item.user_id} />
             </View>
-
             <Card.Image
               style={styles.cardImage}
               resizeMode="contain"

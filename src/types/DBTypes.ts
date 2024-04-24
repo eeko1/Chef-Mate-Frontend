@@ -60,6 +60,13 @@ type Rating = {
   created_at: Date;
 };
 
+type UserFollow = {
+  userfollow_id: number;
+  follower_id: number;
+  followed_id: number;
+  created_at: Date | string;
+};
+
 type Tag = {
   tag_id: number; // REST API
   // tag_id: string; // GraphQL
@@ -117,6 +124,11 @@ type MediaItemWithOwner = MediaItem &
     comments_count: number;
   };
 
+  type UserIdWithFollow = {
+    userId: number;
+    followedId: number;
+  };
+
 // FOR GRAPHQL
 // type MediaItemWithOwner = MediaItem & {
 //   owner: User;
@@ -140,6 +152,7 @@ export type {
   MediaItem,
   Comment,
   Like,
+  UserFollow,
   Rating,
   Tag,
   MediaItemTag,
@@ -150,5 +163,6 @@ export type {
   UserWithNoPassword,
   TokenContent,
   MediaItemWithOwner,
+  UserIdWithFollow,
   FileInfo,
 };

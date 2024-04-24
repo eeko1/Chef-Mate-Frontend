@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
+import Follows from './Follow';
 
 type Props = {
   item: MediaItemWithOwner;
@@ -99,6 +100,7 @@ const MediaListItem = ({item, navigation}: Props) => {
           <Text style={{color: colors.blue, fontSize: 20, paddingBottom: 10}}>
             @{item.username}
           </Text>
+          <Follows userId={user.user_id} followedId={item.user_id} />
         </View>
         <TouchableOpacity
           activeOpacity={1}

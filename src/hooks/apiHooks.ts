@@ -1,11 +1,13 @@
 import {useEffect, useState} from 'react';
 import * as FileSystem from 'expo-file-system';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Comment,
   Like,
   MediaItem,
   MediaItemWithOwner,
   Rating,
+  UserFollow,
   User,
 } from '../types/DBTypes';
 import {fetchData} from '../lib/functions';
@@ -276,6 +278,83 @@ const useLike = () => {
   return {postLike, deleteLike, getCountByMediaId, getUserLike};
 };
 
+const useFollow = () => {
+  const postFollow = async (followed_id: number, token: string) => {
+    try {
+      // Send a POST request to /follows with object { followed_id } and the token in the Authorization header.
+      const options: RequestInit = {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({followed_id}),
+      };
+
+      const result = await fetchData<MessageResponse>(
+        process.env.EXPO_PUBLIC_MEDIA_API + '/follows',
+        options,
+      );
+      console.log('postFollow', result);
+      if (result) {
+        return result;
+      }
+    } catch (e) {
+      console.log('postFollow error', (e as Error).message);
+    }
+  };
+
+  const getFollowCountByFollowedId = async (followed_id: number) => {
+    // Send a GET request to /follows/count/:followed_id to get the number of follows.
+    try {
+      const result = await fetchData<number>(
+        process.env.EXPO_PUBLIC_MEDIA_API + '/follows/count/' + followed_id,
+      );
+      if (result) {
+        return result;
+      }
+    } catch (e) {
+      console.log('getFollowCountByFollowedId error', (e as Error).message);
+    }
+  };
+
+  const deleteFollow = async (followed_id: number, token: string) => {
+    // Send a DELETE request to /follows/:follow_id with the token in the Authorization header.
+    const options: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    console.log('followed_id', followed_id);
+    return await fetchData<MessageResponse>(
+      process.env.EXPO_PUBLIC_MEDIA_API + '/follows/' + followed_id,
+      options,
+    );
+  };
+
+  const getUserFollow = async (followed_id: number) => {
+    // Send a GET request to /follows/user/:followed_id to get the user's follow on the user.
+    const token = await AsyncStorage.getItem('token');
+    const options: RequestInit = {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    const result = await fetchData<UserFollow>(
+      process.env.EXPO_PUBLIC_MEDIA_API + '/follows/count/user/' + followed_id,
+      options,
+    );
+    console.log('getUserFollow', result);
+    if (result) {
+      console.log('getUserFollow', result);
+      return result;
+    }
+  };
+  return {postFollow, deleteFollow, getUserFollow, getFollowCountByFollowedId};
+};
+
 const useComment = () => {
   const postComment = async (
     comment_text: string,
@@ -372,6 +451,7 @@ export {
   useAuthentication,
   useFile,
   useLike,
+  useFollow,
   useComment,
   useRating,
 };
