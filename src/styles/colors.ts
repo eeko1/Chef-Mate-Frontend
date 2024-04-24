@@ -6,4 +6,6 @@ export default {
   blue: '#ACCBED',
   text: '#FEF5F5',
   comment: '#404040',
+  follow_color: '#0095F6',
+  followed_color: '#D3D3D3',
 };

@@ -3,6 +3,7 @@ import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {Card, Icon, ListItem, Button} from '@rneui/base';
 import moment from 'moment';
 import {MediaItemWithOwner} from '../types/DBTypes';
+import Follows from '../components/Follows';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
 
@@ -43,6 +44,7 @@ const MediaListItem = ({item, navigation}: Props) => {
           <Text style={{color: colors.blue, fontSize: 20, paddingBottom: 10}}>
             @{item.username}
           </Text>
+          <Follows userId={user.user_id} followedId={item.user_id} />
         </View>
         <TouchableOpacity
           activeOpacity={1}

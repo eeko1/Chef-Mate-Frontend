@@ -4,6 +4,7 @@ import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {UserFollow, UserIdWithFollow} from '../types/DBTypes';
 import {useFollow} from '../hooks/apiHooks';
+import colors from '../styles/colors';
 
 type FollowState = {
   count: number;
@@ -111,15 +112,26 @@ const Follows = ({userId, followedId}: UserIdWithFollow) => {
   console.log(followState);
 
   return (
-    <View>
-      <Text>Follows: {followState.count}</Text>
-      <TouchableOpacity onPress={handleFollow}>
-        {followState.followUser ? (
-          <Icon name="heart" size={30} color="red" />
-        ) : (
-          <Icon name="heart" size={30} color="black" />
-        )}
-        <Text>{followState.followUser ? 'Unfollow' : 'Follow'}</Text>
+    <View style={{alignItems: 'center', justifyContent: 'center', padding: 20}}>
+      {/* <Text>Follows: {followState.count}</Text> */}
+      <TouchableOpacity
+        onPress={handleFollow}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: 10,
+          backgroundColor: 'lightgrey',
+          borderRadius: 5,
+        }}
+      >
+        <Icon
+          name="check"
+          size={15}
+          color={followState.followUser ? 'black' : 'white'}
+        />
+        <Text style={{marginLeft: 10}}>
+          {followState.followUser ? 'Unfollow' : 'Follow'}
+        </Text>
       </TouchableOpacity>
     </View>
   );
