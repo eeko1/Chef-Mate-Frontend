@@ -108,10 +108,11 @@ const Single = ({route}: any) => {
                 name={userHasLiked ? 'heart-dislike' : 'heart'}
                 color="red"
                 onPress={handleLike}
+                size={50}
               />
               <Text style={{color: colors.blue, fontSize: 20}}>{likes}</Text>
             </View>
-            <Ratings item={item} size={35} />
+            <Ratings item={item} size={50} />
             <View style={styles.tabsContainer}>
               <TouchableOpacity
                 onPress={() => setView('reviews')}

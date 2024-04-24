@@ -132,6 +132,7 @@ const MediaListItem = ({item, navigation}: Props) => {
                   name={userHasLiked ? 'heart-dislike' : 'heart'}
                   color="red"
                   onPress={handleLike}
+                  size={35}
                 />
                 <Text style={{color: colors.blue, fontSize: 20}}>{likes}</Text>
               </View>
@@ -177,13 +178,9 @@ const MediaListItem = ({item, navigation}: Props) => {
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{color: colors.blue, fontSize: 20}}>
-              Reviews: {item.ratings ? item.ratings.length : 0} {' ('}
-              {item.ratings
-                ? (
-                    item.ratings.reduce((a, b) => a + b, 0) /
-                    item.ratings.length
-                  ).toFixed(1)
-                : 0}{' '}
+              Rating: {item.ratings ? item.ratings.length : 0} {' ('}
+              {/*TODO: add average rating*/}
+              {item.ratings ? item.ratings.length : 0}{' '}
             </Text>
             <Icon type="ionicon" name="star" color="yellow" />
             <Text style={{color: colors.blue, fontSize: 20}}>)</Text>
