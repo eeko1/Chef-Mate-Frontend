@@ -178,8 +178,8 @@ const MediaListItem = ({item, navigation}: Props) => {
             )}
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{color: colors.blue, fontSize: 20}}>
-              Rating: <AverageRating item={item} />
+            <Text style={{color: colors.blue, fontSize: 20, marginRight: 6}}>
+              <AverageRating item={item} />
             </Text>
             <Icon type="ionicon" name="star" color="yellow" />
           </View>
