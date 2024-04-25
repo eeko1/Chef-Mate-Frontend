@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
+import AverageRating from './AverageRating';
 import Follows from './Follow';
 
 type Props = {
@@ -134,6 +135,7 @@ const MediaListItem = ({item, navigation}: Props) => {
                   name={userHasLiked ? 'heart-dislike' : 'heart'}
                   color="red"
                   onPress={handleLike}
+                  size={35}
                 />
                 <Text style={{color: colors.blue, fontSize: 20}}>{likes}</Text>
               </View>
@@ -178,17 +180,10 @@ const MediaListItem = ({item, navigation}: Props) => {
             )}
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{color: colors.blue, fontSize: 20}}>
-              Reviews: {item.ratings ? item.ratings.length : 0} {' ('}
-              {item.ratings
-                ? (
-                    item.ratings.reduce((a, b) => a + b, 0) /
-                    item.ratings.length
-                  ).toFixed(1)
-                : 0}{' '}
+            <Text style={{color: colors.blue, fontSize: 20, marginRight: 6}}>
+              <AverageRating item={item} />
             </Text>
             <Icon type="ionicon" name="star" color="yellow" />
-            <Text style={{color: colors.blue, fontSize: 20}}>)</Text>
           </View>
           <Text style={{paddingTop: 10, color: colors.blue}}>
             {moment(item.created_at).fromNow()}{' '}

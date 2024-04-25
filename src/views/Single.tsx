@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Card, Text, Icon, Image} from '@rneui/themed';
 import {
   ScrollView,
@@ -10,6 +10,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MediaItemWithOwner} from '../types/DBTypes';
 import Ratings from '../components/Ratings';
 import Comments from '../components/Comments';
@@ -22,7 +23,62 @@ const Single = ({route}: any) => {
   const item: MediaItemWithOwner = route.params;
   const [fileType, fileFormat] = item.media_type.split('&#x2F;');
   const [view, setView] = useState<'reviews' | 'details'>('reviews');
+  const [likes, setLikes] = useState(item.likes ? item.likes.length : 0);
+  const [userHasLiked, setUserHasLiked] = useState(false);
   const {user} = useUserContext();
+
+  // LIKE USEEFFECT
+  useEffect(() => {
+    if (
+      item.likes &&
+      item.likes.some((like) => like.user_id === user.user_id)
+    ) {
+      setUserHasLiked(true);
+    }
+  }, []);
+
+  const handleLike = async () => {
+    try {
+      //Get token from async storage
+      const token = await AsyncStorage.getItem('token');
+      let response;
+      if (userHasLiked) {
+        response = await fetch(
+          `${process.env.EXPO_PUBLIC_MEDIA_API}/likes/${item.media_id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + token,
+            },
+          },
+        );
+      } else {
+        response = await fetch(`${process.env.EXPO_PUBLIC_MEDIA_API}/likes/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token,
+          },
+          body: JSON.stringify({
+            media_id: item.media_id,
+            user_id: user.user_id,
+          }),
+        });
+      }
+
+      if (!response.ok) {
+        const responseBody = await response.json();
+        console.log('Server response', responseBody);
+        throw new Error('Error liking/unliking the post');
+      }
+
+      setLikes(userHasLiked ? likes - 1 : likes + 1);
+      setUserHasLiked(!userHasLiked);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -47,14 +103,17 @@ const Single = ({route}: any) => {
               source={{uri: item.filename}}
             />
 
-            <View style={styles.likesSection}>
-              <Icon type="ionicon" name="heart" color="red" />
-              <Text style={{color: colors.blue, fontSize: 20}}>
-                {item.likes ? item.likes.length : ' ' + 0}
-              </Text>
-              <Text style={styles.titleText}>{item.title}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Icon
+                type="ionicon"
+                name={userHasLiked ? 'heart-dislike' : 'heart'}
+                color="red"
+                onPress={handleLike}
+                size={50}
+              />
+              <Text style={{color: colors.blue, fontSize: 20}}>{likes}</Text>
             </View>
-            <Ratings item={item} size={35} />
+            <Ratings item={item} size={50} />
             <View style={styles.tabsContainer}>
               <TouchableOpacity
                 onPress={() => setView('reviews')}
@@ -120,7 +179,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: -20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   likesText: {
     color: colors.blue,
@@ -174,7 +233,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingBottom: 10,
     fontWeight: 'bold',
-  }
+  },
 });
 
 export default Single;

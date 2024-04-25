@@ -12,17 +12,21 @@ const Ratings = ({item, size}: {item: MediaItemWithOwner; size: number}) => {
   const {postRating, getRatingByMediaId, getUserRatings} = useRating();
 
   const ratingChange = async (ratingValue: number) => {
-    setUserRating(ratingValue);
+    setUserRating(Math.round(ratingValue));
   };
 
   const ratingCompleted = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const response = await postRating(item.media_id, userRating, token);
-        console.log('rating completed', response);
-        fetchRating();
-        fetchUserRating();
+        if (userRating >= 1 && userRating <= 5) {
+          const response = await postRating(item.media_id, userRating, token);
+          console.log('rating completed', response);
+          fetchRating();
+          fetchUserRating();
+        } else {
+          console.log('Rating value is not within the expected range (1-5)');
+        }
       }
     } catch (error) {
       console.log((error as Error).message);
@@ -32,7 +36,13 @@ const Ratings = ({item, size}: {item: MediaItemWithOwner; size: number}) => {
   const fetchRating = async () => {
     try {
       const ratingResult = await getRatingByMediaId(item.media_id);
-      setAverageRating(ratingResult.average);
+      const average = Number(ratingResult.average);
+      if (isNaN(average)) {
+        console.log('Fetched average rating is not a number');
+        setAverageRating(0);
+      } else {
+        setAverageRating(average);
+      }
     } catch (error) {
       console.log((error as Error).message);
       setAverageRating(0);
