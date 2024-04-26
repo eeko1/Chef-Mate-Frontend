@@ -31,7 +31,7 @@ const MediaListItem = ({item, navigation}: Props) => {
         >
           <Image
             source={{
-              uri: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Profile\nImage',
+              uri: user.profile_picture_url,
             }}
             style={{
               width: 50,

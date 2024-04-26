@@ -115,7 +115,7 @@ const useMedia = () => {
 
     // Prepare the request options
     const options = {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         Authorization: 'Bearer ' + token,
         'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ const useUser = () => {
       body: JSON.stringify(inputs),
     };
 
-    await fetchData<User>(
+    await fetchData<UserResponse>(
       process.env.EXPO_PUBLIC_AUTH_API + '/users/' + user_id,
       options,
     );

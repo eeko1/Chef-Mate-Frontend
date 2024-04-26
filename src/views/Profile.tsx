@@ -10,7 +10,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {Icon, ListItem} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
-import {Input} from 'react-native-elements';
+import {Card, Input} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
@@ -57,7 +57,16 @@ const Profile = () => {
         >
           <Icon name="edit" color="white" style={styles.edit} />
         </TouchableOpacity>
-        <UploadImage />
+        <Card.Image
+          style={{
+            width: 150,
+            height: 150,
+            borderWidth: 2,
+            borderRadius: 150,
+            marginTop: 10,
+          }}
+          source={{uri: user.profile_picture_url}}
+        />
         <ListItem containerStyle={styles.listItem}>
           <ListItem.Title style={styles.listItemTitle}>
             @{user.username}
@@ -66,31 +75,31 @@ const Profile = () => {
         <View style={styles.stats}>
           <ListItem containerStyle={styles.listItem}>
             <ListItem.Title style={styles.listItemTitle}>
-              Followers
+              Followers: 57
             </ListItem.Title>
           </ListItem>
           <ListItem containerStyle={styles.listItem}>
             <ListItem.Title style={styles.listItemTitle}>
-              Recipes
+              Recipes: 2
             </ListItem.Title>
           </ListItem>
         </View>
         <View style={styles.stats}>
           <ListItem containerStyle={styles.listItem}>
             <ListItem.Title style={styles.listItemTitle}>
-              Following
+              Following: 48
             </ListItem.Title>
           </ListItem>
           <ListItem containerStyle={styles.listItem}>
             <ListItem.Title style={styles.listItemTitle}>
-              Reviews
+              Reviews: 1
             </ListItem.Title>
           </ListItem>
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('My Files')}
+           // onPress={() => navigation.navigate('My Files')}
           >
             <Text style={styles.buttonText}>My Posts</Text>
           </TouchableOpacity>
@@ -98,7 +107,7 @@ const Profile = () => {
             <Text style={styles.buttonText}>My saved posts</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleLogout}>
+        <TouchableOpacity style={{padding: 10}} onPress={handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
           <Icon name="logout" color="black" />
         </TouchableOpacity>
@@ -121,9 +130,16 @@ const Profile = () => {
               borderWidth: 2,
             }}
           >
-            <Text style={{padding: 10, fontWeight: 'bold'}}>
-              Modify user information
-            </Text>
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{padding: 10, fontWeight: 'bold'}}>
+                Modify user information
+              </Text>
+              <UploadImage />
+            </View>
             <Controller
               control={control}
               render={({field: {onChange, onBlur, value}}) => (
@@ -169,18 +185,26 @@ const Profile = () => {
               )}
               name="email"
             />
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-              style={{padding: 10}}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
             >
-              <Icon name="close" color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleSubmit(onSubmit)}
-              style={{padding: 10}}
-            >
-              <Icon name="save" color="black" />
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{padding: 20}}
+              >
+                <Icon name="close" color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleSubmit(onSubmit)}
+                style={{padding: 20}}
+              >
+                <Icon name="save" color="black" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -209,11 +233,14 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   button: {
-    backgroundColor: '#7EAA92',
+    backgroundColor: 'lightgray',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 30,
     marginTop: 10,
+    margin: 5,
     alignItems: 'center',
+    borderColor: 'white',
+    borderWidth: 2,
   },
   buttonText: {
     color: colors.darkgreen,

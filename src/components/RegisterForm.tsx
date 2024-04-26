@@ -84,7 +84,7 @@ const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
-            placeholder="Password"
+            placeholder="Password (min 5 characters)"
             secureTextEntry
             onBlur={onBlur}
             onChangeText={onChange}

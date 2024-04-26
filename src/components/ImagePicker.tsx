@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Image, View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useMedia } from '../hooks/apiHooks';
+import {useMedia} from '../hooks/apiHooks';
 
 export default function UploadImage() {
   const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(
