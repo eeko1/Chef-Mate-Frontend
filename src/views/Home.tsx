@@ -1,55 +1,45 @@
 import {FlatList, View} from 'react-native';
-import {NavigationProp, ParamListBase} from '@react-navigation/native';
-import {SearchBar} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React, {useMemo, useState} from 'react';
+import {TextInput} from 'react-native-paper';
 import {useMedia} from '../hooks/apiHooks';
 import MediaListItem from '../components/MediaListItem';
 import colors from '../styles/colors';
 
-const Home = ({navigation}: {navigation: NavigationProp<ParamListBase>}) => {
+const Home = ({navigation}) => {
   const {mediaArray} = useMedia();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const onChangeSearch = (query) => setSearchQuery(query);
+
+  const filteredMedia = useMemo(() => {
+    return mediaArray.filter((item) =>
+      item.ingredients.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  }, [searchQuery, mediaArray]);
 
   return (
     <>
-      <View
-        style={{
-          backgroundColor: colors.lightgreen,
-        }}
-      >
-        <SearchBar
-          placeholder="Search for a recipe"
-          containerStyle={{
-            backgroundColor: colors.lightgreen,
-            borderBottomColor: 'transparent',
-            borderTopColor: 'transparent',
+      <View style={{backgroundColor: colors.lightgreen}}>
+        <TextInput
+          placeholder="Search recipes by ingredients"
+          value={searchQuery}
+          onChangeText={onChangeSearch}
+          style={{
+            backgroundColor: colors.sage,
+            margin: 10,
+            minHeight: 50,
+            fontSize: 20,
+            borderRadius: 10,
           }}
-          inputContainerStyle={{backgroundColor: colors.sage}}
-          inputStyle={{color: colors.darkgreen, fontSize: 20}}
-          placeholderTextColor={colors.darkgreen}
-          onBlur={undefined}
-          onChangeText={undefined}
-          onFocus={undefined}
-          value={''}
-          platform={'default'}
-          clearIcon={undefined}
-          searchIcon={<Icon name="search" color={colors.darkgreen} />}
-          loadingProps={undefined}
-          showLoading={false}
-          onClear={undefined}
-          onCancel={undefined}
-          lightTheme={false}
-          round={true}
-          cancelButtonTitle={''}
-          cancelButtonProps={undefined}
-          showCancel={false}
         />
       </View>
       <FlatList
         style={{backgroundColor: colors.lightgreen}}
-        data={mediaArray}
+        data={filteredMedia}
         renderItem={({item}) => (
           <MediaListItem navigation={navigation} item={item} />
         )}
+        keyExtractor={(item) => item?.id?.toString()}
       />
     </>
   );
