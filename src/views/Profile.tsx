@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -17,11 +17,13 @@ import colors from '../styles/colors';
 import UploadImage from '../components/ImagePicker';
 import {useUser} from '../hooks/apiHooks';
 import {Credentials} from '../types/LocalTypes';
-import {User} from '../types/DBTypes';
+import {User, UserWithNoPassword} from '../types/DBTypes';
+import {useUpdateContext} from '../hooks/UpdateHook';
 
 const Profile = () => {
-  const {handleLogout, user} = useUserContext();
+  const {handleLogout, user, handlePut} = useUserContext();
   const navigation = useNavigation();
+  const {update, setUpdate} = useUpdateContext();
   const [modalVisible, setModalVisible] = useState(false);
   const initValues: Credentials = {username: '', password: '', email: ''};
   const {
@@ -32,18 +34,18 @@ const Profile = () => {
     defaultValues: initValues,
   });
 
-  const {putUser, getEmailAvailable} = useUser();
+  const {getEmailAvailable, getUserById} = useUser();
 
   const onSubmit = async (data) => {
     try {
-      const token = await AsyncStorage.getItem('token');
       const inputs: Pick<User, 'username' | 'email'> = {
         username: data.username || user.username,
         email: data.email || user.email,
       };
 
-      await putUser(user.user_id, inputs, token);
-      setModalVisible(false);
+      await handlePut(user.user_id, inputs);
+        setUpdate(!update);
+        setModalVisible(false);
     } catch (error) {
       console.error('Error updating user:', error);
     }
@@ -199,7 +201,7 @@ const Profile = () => {
                 <Icon name="close" color="black" />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => handleSubmit(onSubmit)}
+                onPress={() => handleSubmit(onSubmit)()}
                 style={{padding: 20}}
               >
                 <Icon name="save" color="black" />

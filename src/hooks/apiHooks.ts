@@ -7,6 +7,7 @@ import {
   MediaItem,
   MediaItemWithOwner,
   User,
+  UserWithNoPassword,
 } from '../types/DBTypes';
 import {fetchData} from '../lib/functions';
 import {Credentials} from '../types/LocalTypes';
@@ -18,6 +19,7 @@ import {
   UserResponse,
 } from '../types/MessageTypes';
 import {useUpdateContext} from './UpdateHook';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
@@ -134,6 +136,7 @@ const useMedia = () => {
 };
 
 const useUser = () => {
+  const [user, setUser] = useState<UserWithNoPassword | null>(null);
   // TODO: implement network functions for auth server user endpoints
   const getUserByToken = async (token: string) => {
     const options = {
@@ -141,10 +144,11 @@ const useUser = () => {
         Authorization: 'Bearer ' + token,
       },
     };
-    return await fetchData<UserResponse>(
+    const result = await fetchData<UserResponse>(
       process.env.EXPO_PUBLIC_AUTH_API + '/users/token/',
       options,
     );
+    return result.user;
   };
 
   const postUser = async (user: Record<string, string>) => {
@@ -175,16 +179,18 @@ const useUser = () => {
   };
 
   const getUserById = async (user_id: number) => {
-    return await fetchData<User>(
+    const result = await fetchData<UserWithNoPassword>(
       process.env.EXPO_PUBLIC_AUTH_API + '/users/' + user_id,
     );
+    console.log('getUserById result', result);
+    return result;
   };
 
   const putUser = async (
     user_id: number,
     inputs: Pick<User, 'username' | 'email'>,
-    token: string,
   ) => {
+    const token = await AsyncStorage.getItem('token');
     const options: RequestInit = {
       method: 'PUT',
       headers: {
@@ -193,11 +199,16 @@ const useUser = () => {
       },
       body: JSON.stringify(inputs),
     };
+    console.log('putUser options', options);
+    console.log(user_id, 'user_id');
 
-    await fetchData<UserResponse>(
-      process.env.EXPO_PUBLIC_AUTH_API + '/users/' + user_id,
+    const result = await fetchData<UserResponse>(
+      process.env.EXPO_PUBLIC_AUTH_API + '/users',
       options,
     );
+    if (result) {
+      return result;
+    }
   };
 
   return {

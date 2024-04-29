@@ -6,6 +6,10 @@ export type AuthContextType = {
   handleLogin: (credentials: Credentials) => void;
   handleLogout: () => void;
   handleAutoLogin: () => void;
+  handlePut: (
+    userId: number,
+    inputs: Pick<UserWithNoPassword, 'username' | 'email'>,
+  ) => void;
 };
 
 type GraphQLResponse<T> = {

@@ -10,7 +10,7 @@ const UserContext = createContext<AuthContextType | null>(null);
 const UserProvider = ({children}: {children: React.ReactNode}) => {
   const [user, setUser] = useState<UserWithNoPassword | null>(null);
   const {postLogin} = useAuthentication();
-  const {getUserByToken} = useUser();
+  const {getUserByToken, putUser} = useUser();
 
   // login, logout and autologin functions are here instead of components
   const handleLogin = async (credentials: Credentials) => {
@@ -45,17 +45,35 @@ const UserProvider = ({children}: {children: React.ReactNode}) => {
       if (token) {
         // if token exists, get user data from API
         const userResponse = await getUserByToken(token);
-        // set user to state
-        setUser(userResponse.user);
+        if (userResponse) {
+          // set user to state
+          setUser(userResponse);
+        }
       }
     } catch (e) {
       console.log((e as Error).message);
     }
   };
 
+  const handlePut = async (
+    userId: number,
+    inputs: Pick<UserWithNoPassword, 'username' | 'email'>,
+  ) => {
+    try {
+        const result = await putUser(userId, inputs);
+        if (result) {
+          setUser(result.user);
+          console.log('User updated:', result);
+          console.log(user, 'user');
+        }
+      } catch (error) {
+        console.error('Error updating user:', error);
+      }
+  }
+
   return (
     <UserContext.Provider
-      value={{user, handleLogin, handleLogout, handleAutoLogin}}
+      value={{user, handleLogin, handleLogout, handleAutoLogin, handlePut}}
     >
       {children}
     </UserContext.Provider>
