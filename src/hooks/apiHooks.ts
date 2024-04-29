@@ -314,9 +314,31 @@ const useFollow = () => {
         return result;
       }
     } catch (e) {
+      if ((e as Error).message === "No follow found") {
+        return 0;
+      } else {
       console.log('getFollowCountByFollowedId error', (e as Error).message);
+      }
     }
   };
+
+  const getFollowingCountByFollowerId = async (follower_id: number) => {
+    // Send a GET request to /follows/count/follower/:follower_id to get the number of follows.
+    try {
+      const result = await fetchData<number>(
+        process.env.EXPO_PUBLIC_MEDIA_API + '/follows/count/following/' + follower_id,
+      );
+      if (result) {
+        return result;
+      }
+    } catch (e) {
+      if ((e as Error).message === "No follow found") {
+        return 0;
+      } else {
+      console.log('getFollowingCountByFollowerId error', (e as Error).message);
+      }
+    }
+  }
 
   const deleteFollow = async (followed_id: number, token: string) => {
     // Send a DELETE request to /follows/:follow_id with the token in the Authorization header.
@@ -352,7 +374,7 @@ const useFollow = () => {
       return result;
     }
   };
-  return {postFollow, deleteFollow, getUserFollow, getFollowCountByFollowedId};
+  return {postFollow, deleteFollow, getUserFollow, getFollowCountByFollowedId, getFollowingCountByFollowerId};
 };
 
 const useComment = () => {

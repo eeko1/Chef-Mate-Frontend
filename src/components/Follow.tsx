@@ -4,6 +4,8 @@ import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {UserFollow, UserIdWithFollow} from '../types/DBTypes';
 import {useFollow} from '../hooks/apiHooks';
+import colors from '../styles/colors';
+import {useUpdateContext} from '../hooks/UpdateHook';
 
 type FollowState = {
   count: number;
@@ -44,6 +46,8 @@ const Follows = ({userId, followedId}: UserIdWithFollow) => {
   );
   const {getUserFollow, postFollow, deleteFollow, getFollowCountByFollowedId} =
     useFollow();
+
+  const {update, setUpdate} = useUpdateContext();
 
   // get user follow
   const getFollows = async () => {
@@ -89,19 +93,27 @@ const Follows = ({userId, followedId}: UserIdWithFollow) => {
       // If user has already followed, then delete the follow, otherwise post the follow
       if (followState.followUser !== null) {
         // delete the follow and dispatch the new follow count to the state
-        await deleteFollow(Number(followState.followUser.followed_id), token);
+        const result = await deleteFollow(Number(followState.followUser.followed_id), token);
+        if (!result) {
+          return;
+        }
         // dispaching is already done in the getFollows and getFollowCount functions
         // other way, is to do update locally after sucessful api call
         // for deleting it's ok because there is no need to get any data from the api
         followDispatch({type: 'setFollowCount', count: followState.count - 1});
         followDispatch({type: 'follow', follow: null});
+        setUpdate((prevState) => !prevState);
       } else {
         // post the follow and dispatch the new follow count to the state. Dispatching is already done in the getFollows and getFollowCount functions
         console.log('followedId', followedId, 'token', token);
         const result = await postFollow(Number(followedId), token);
+        if (!result) {
+          return;
+        }
         console.log('result', result);
         getFollows();
         getFollowCount();
+        setUpdate((prevState) => !prevState);
       }
     } catch (e) {
       console.log('follow error', (e as Error).message);
@@ -119,7 +131,7 @@ const Follows = ({userId, followedId}: UserIdWithFollow) => {
           flexDirection: 'row',
           alignItems: 'center',
           padding: 10,
-          backgroundColor: 'lightgrey',
+          backgroundColor: colors.sage,
           borderRadius: 5,
         }}
       >

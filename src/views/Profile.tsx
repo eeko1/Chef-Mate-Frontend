@@ -12,15 +12,53 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {useUserContext} from '../hooks/ContextHooks';
+import {useFollow} from '../hooks/apiHooks';
 import colors from '../styles/colors';
+import Follows from '../components/Follow';
+import {useUpdateContext} from '../hooks/UpdateHook';
+import {UserIdWithFollow} from '../types/DBTypes';
 import MyFiles from './MyFiles';
+
 
 const Profile = () => {
   const {handleLogout, user} = useUserContext();
+  const {getFollowCountByFollowedId, getFollowingCountByFollowerId} = useFollow();
+  const [followCount, setFollowCount] = useState<number>(0);
+  const [followingCount, setFollowingCount] = useState<number>(0);
   const navigation: NavigationProp<ParamListBase> = useNavigation();
-  const [view, setView] = useState<'My posts' | 'My saved posts'>('My posts');
+  const [view, setView] = useState<'My posts' | 'My liked posts'>('My posts');
+  const {update} = useUpdateContext();
+
+  const getFollowerCount = async () => {
+    try {
+      const count = await getFollowCountByFollowedId(user.user_id);
+      if (count) {
+        setFollowCount(count);
+        console.log('follow count', count);
+      }
+    } catch (e) {
+      console.log('get follow count error', (e as Error).message);
+    }
+  };
+
+  const getFollowingCount = async () => {
+    try {
+      const count = await getFollowingCountByFollowerId(user.user_id);
+      if (count) {
+        console.log('following count', count);
+        setFollowingCount(count);
+      }
+    } catch (e) {
+      console.log('get following count error', (e as Error).message);
+    }
+  };
+
+  useEffect(() => {
+    getFollowerCount();
+    getFollowingCount();
+  }, [update]);
 
   return (
     <>
@@ -41,19 +79,19 @@ const Profile = () => {
           <View style={styles.stats}>
             <ListItem containerStyle={styles.listItem}>
               <ListItem.Title style={styles.listItemTitle}>
-                Followers
+                Followers: {followCount}
               </ListItem.Title>
             </ListItem>
             <ListItem containerStyle={styles.listItem}>
               <ListItem.Title style={styles.listItemTitle}>
-                Recipes
+                Recipes:
               </ListItem.Title>
             </ListItem>
           </View>
           <View style={styles.stats}>
             <ListItem containerStyle={styles.listItem}>
               <ListItem.Title style={styles.listItemTitle}>
-                Following
+                Following: {followingCount}
               </ListItem.Title>
             </ListItem>
             <ListItem containerStyle={styles.listItem}>
@@ -72,16 +110,16 @@ const Profile = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => setView('My saved posts')}
+              onPress={() => setView('My liked posts')}
             >
-              <Text style={styles.buttonText}>My saved posts</Text>
+              <Text style={styles.buttonText}>My liked posts</Text>
             </TouchableOpacity>
             <Card.Divider />
           </View>
           {view === 'My posts' && <MyFiles navigation={navigation} />}
-          {view === 'My saved posts' && (
+          {view === 'My liked posts' && (
             <View>
-              <Text>My saved posts</Text>
+              <Text>My liked posts</Text>
             </View>
           )}
           <TouchableOpacity style={styles.button} onPress={handleLogout}>

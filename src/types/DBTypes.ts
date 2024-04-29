@@ -124,10 +124,10 @@ type MediaItemWithOwner = MediaItem &
     comments_count: number;
   };
 
-  type UserIdWithFollow = {
-    userId: number;
-    followedId: number;
-  };
+type UserIdWithFollow = {
+  userId: number;
+  followedId: number;
+};
 
 // FOR GRAPHQL
 // type MediaItemWithOwner = MediaItem & {
