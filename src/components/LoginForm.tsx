@@ -6,7 +6,7 @@ import {Credentials} from '../types/LocalTypes';
 
 const LoginForm = () => {
   const {handleLogin} = useUserContext();
-  const initValues: Credentials = {username: '', password: ''};
+  const initValues: Credentials = {username: '', password: '', email: ''};
   const {
     control,
     handleSubmit,

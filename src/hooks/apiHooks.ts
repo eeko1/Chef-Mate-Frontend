@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import * as FileSystem from 'expo-file-system';
+import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Comment,
@@ -9,6 +10,7 @@ import {
   Rating,
   UserFollow,
   User,
+  UserWithNoPassword,
 } from '../types/DBTypes';
 import {fetchData} from '../lib/functions';
 import {Credentials} from '../types/LocalTypes';
@@ -107,10 +109,37 @@ const useMedia = () => {
     );
   };
 
-  return {mediaArray, postMedia, putMedia};
+  const postProfilePic = (
+    file: ImagePicker.ImagePickerAsset,
+    token: string,
+  ) => {
+    // Extract necessary information from the ImagePickerAsset object
+    const media: Pick<User, 'profile_picture_url'> = {
+      profile_picture_url: file.uri || null,
+    };
+
+    // Prepare the request options
+    const options = {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(media),
+    };
+
+    // Perform the API request
+    return fetchData<User>(
+      process.env.EXPO_PUBLIC_AUTH_API + '/users',
+      options,
+    );
+  };
+
+  return {mediaArray, postMedia, putMedia, postProfilePic};
 };
 
 const useUser = () => {
+  const [user, setUser] = useState<UserWithNoPassword | null>(null);
   // TODO: implement network functions for auth server user endpoints
   const getUserByToken = async (token: string) => {
     const options = {
@@ -118,10 +147,11 @@ const useUser = () => {
         Authorization: 'Bearer ' + token,
       },
     };
-    return await fetchData<UserResponse>(
+    const result = await fetchData<UserResponse>(
       process.env.EXPO_PUBLIC_AUTH_API + '/users/token/',
       options,
     );
+    return result.user;
   };
 
   const postUser = async (user: Record<string, string>) => {
@@ -152,9 +182,36 @@ const useUser = () => {
   };
 
   const getUserById = async (user_id: number) => {
-    return await fetchData<User>(
+    const result = await fetchData<UserWithNoPassword>(
       process.env.EXPO_PUBLIC_AUTH_API + '/users/' + user_id,
     );
+    console.log('getUserById result', result);
+    return result;
+  };
+
+  const putUser = async (
+    user_id: number,
+    inputs: Pick<User, 'username' | 'email'>,
+  ) => {
+    const token = await AsyncStorage.getItem('token');
+    const options: RequestInit = {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(inputs),
+    };
+    console.log('putUser options', options);
+    console.log(user_id, 'user_id');
+
+    const result = await fetchData<UserResponse>(
+      process.env.EXPO_PUBLIC_AUTH_API + '/users',
+      options,
+    );
+    if (result) {
+      return result;
+    }
   };
 
   return {
@@ -163,6 +220,7 @@ const useUser = () => {
     getUsernameAvailable,
     getEmailAvailable,
     getUserById,
+    putUser,
   };
 };
 
@@ -314,10 +372,10 @@ const useFollow = () => {
         return result;
       }
     } catch (e) {
-      if ((e as Error).message === "No follow found") {
+      if ((e as Error).message === 'No follow found') {
         return 0;
       } else {
-      console.log('getFollowCountByFollowedId error', (e as Error).message);
+        console.log('getFollowCountByFollowedId error', (e as Error).message);
       }
     }
   };
@@ -326,19 +384,24 @@ const useFollow = () => {
     // Send a GET request to /follows/count/follower/:follower_id to get the number of follows.
     try {
       const result = await fetchData<number>(
-        process.env.EXPO_PUBLIC_MEDIA_API + '/follows/count/following/' + follower_id,
+        process.env.EXPO_PUBLIC_MEDIA_API +
+          '/follows/count/following/' +
+          follower_id,
       );
       if (result) {
         return result;
       }
     } catch (e) {
-      if ((e as Error).message === "No follow found") {
+      if ((e as Error).message === 'No follow found') {
         return 0;
       } else {
-      console.log('getFollowingCountByFollowerId error', (e as Error).message);
+        console.log(
+          'getFollowingCountByFollowerId error',
+          (e as Error).message,
+        );
       }
     }
-  }
+  };
 
   const deleteFollow = async (followed_id: number, token: string) => {
     // Send a DELETE request to /follows/:follow_id with the token in the Authorization header.
@@ -374,7 +437,13 @@ const useFollow = () => {
       return result;
     }
   };
-  return {postFollow, deleteFollow, getUserFollow, getFollowCountByFollowedId, getFollowingCountByFollowerId};
+  return {
+    postFollow,
+    deleteFollow,
+    getUserFollow,
+    getFollowCountByFollowedId,
+    getFollowingCountByFollowerId,
+  };
 };
 
 const useComment = () => {

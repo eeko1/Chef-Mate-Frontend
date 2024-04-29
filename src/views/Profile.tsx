@@ -1,35 +1,61 @@
-import {
-  NavigationProp,
-  ParamListBase,
-  useNavigation,
-} from '@react-navigation/native';
-import {Card, Icon, ListItem} from '@rneui/base';
+import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   Text,
   View,
-  FlatList,
+  Modal,
 } from 'react-native';
-import React, {useEffect, useReducer, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {Icon, ListItem} from '@rneui/base';
+import {Controller, useForm} from 'react-hook-form';
+import {Card, Input} from 'react-native-elements';
 import {useUserContext} from '../hooks/ContextHooks';
-import {useFollow} from '../hooks/apiHooks';
+import {useFollow, useUser} from '../hooks/apiHooks';
 import colors from '../styles/colors';
-import Follows from '../components/Follow';
+import UploadImage from '../components/ImagePicker';
+import {Credentials} from '../types/LocalTypes';
+import {User} from '../types/DBTypes';
 import {useUpdateContext} from '../hooks/UpdateHook';
-import {UserIdWithFollow} from '../types/DBTypes';
 import MyFiles from './MyFiles';
 
-
 const Profile = () => {
-  const {handleLogout, user} = useUserContext();
-  const {getFollowCountByFollowedId, getFollowingCountByFollowerId} = useFollow();
+  const {handleLogout, user, handlePut} = useUserContext();
+  const {getFollowCountByFollowedId, getFollowingCountByFollowerId} =
+    useFollow();
   const [followCount, setFollowCount] = useState<number>(0);
   const [followingCount, setFollowingCount] = useState<number>(0);
-  const navigation: NavigationProp<ParamListBase> = useNavigation();
+  const navigation = useNavigation();
+  const {update, setUpdate} = useUpdateContext();
+  const [modalVisible, setModalVisible] = useState(false);
+  const initValues: Credentials = {username: '', password: '', email: ''};
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    defaultValues: initValues,
+  });
+
+  const {getEmailAvailable} = useUser();
+
+  const onSubmit = async (data) => {
+    try {
+      const inputs: Pick<User, 'username' | 'email'> = {
+        username: data.username || user.username,
+        email: data.email || user.email,
+      };
+
+      await handlePut(user.user_id, inputs);
+      setUpdate(!update);
+      setModalVisible(false);
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
   const [view, setView] = useState<'My posts' | 'My liked posts'>('My posts');
-  const {update} = useUpdateContext();
 
   const getFollowerCount = async () => {
     try {
@@ -62,72 +88,168 @@ const Profile = () => {
 
   return (
     <>
-      {user && (
-        <ScrollView contentContainerStyle={styles.container}>
-          <TouchableOpacity onPress={() => navigation.navigate('ProfileModal')}>
-            <Icon name="edit" color="white" style={styles.edit} />
-          </TouchableOpacity>
-          <Card.Image
-            source={{uri: 'https://placekitten.com/300/300'}}
-            style={styles.image}
-          />
+      <ScrollView contentContainerStyle={styles.container}>
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)} // Open modal when pressed
+        >
+          <Icon name="edit" color="white" />
+        </TouchableOpacity>
+        <Card.Image
+          style={{
+            width: 150,
+            height: 150,
+            borderWidth: 2,
+            borderRadius: 150,
+            marginTop: 10,
+          }}
+          source={{uri: user.profile_picture_url}}
+        />
+        <ListItem containerStyle={styles.listItem}>
+          <ListItem.Title style={styles.listItemTitle}>
+            @{user.username}
+          </ListItem.Title>
+        </ListItem>
+        <View style={styles.stats}>
           <ListItem containerStyle={styles.listItem}>
             <ListItem.Title style={styles.listItemTitle}>
-              @{user.username}
+              Followers: {followCount}
             </ListItem.Title>
           </ListItem>
-          <View style={styles.stats}>
-            <ListItem containerStyle={styles.listItem}>
-              <ListItem.Title style={styles.listItemTitle}>
-                Followers: {followCount}
-              </ListItem.Title>
-            </ListItem>
-            <ListItem containerStyle={styles.listItem}>
-              <ListItem.Title style={styles.listItemTitle}>
-                Recipes:
-              </ListItem.Title>
-            </ListItem>
-          </View>
-          <View style={styles.stats}>
-            <ListItem containerStyle={styles.listItem}>
-              <ListItem.Title style={styles.listItemTitle}>
-                Following: {followingCount}
-              </ListItem.Title>
-            </ListItem>
-            <ListItem containerStyle={styles.listItem}>
-              <ListItem.Title style={styles.listItemTitle}>
-                Reviews
-              </ListItem.Title>
-            </ListItem>
-          </View>
-          <View style={styles.buttons}>
-            <Card.Divider />
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setView('My posts')}
-            >
-              <Text style={styles.buttonText}>My Posts</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setView('My liked posts')}
-            >
-              <Text style={styles.buttonText}>My liked posts</Text>
-            </TouchableOpacity>
-            <Card.Divider />
-          </View>
-          {view === 'My posts' && <MyFiles navigation={navigation} />}
-          {view === 'My liked posts' && (
-            <View>
-              <Text>My liked posts</Text>
-            </View>
-          )}
-          <TouchableOpacity style={styles.button} onPress={handleLogout}>
-            <Text style={styles.buttonText}>Logout</Text>
-            <Icon name="logout" color="black" />
+          <ListItem containerStyle={styles.listItem}>
+            <ListItem.Title style={styles.listItemTitle}>
+              Recipes:
+            </ListItem.Title>
+          </ListItem>
+        </View>
+        <View style={styles.stats}>
+          <ListItem containerStyle={styles.listItem}>
+            <ListItem.Title style={styles.listItemTitle}>
+              Following: {followingCount}
+            </ListItem.Title>
+          </ListItem>
+          <ListItem containerStyle={styles.listItem}>
+            <ListItem.Title style={styles.listItemTitle}>
+              Reviews:
+            </ListItem.Title>
+          </ListItem>
+        </View>
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setView('My posts')}
+          >
+            <Text style={styles.buttonText}>My Posts</Text>
           </TouchableOpacity>
-        </ScrollView>
-      )}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setView('My liked posts')}
+          >
+            <Text style={styles.buttonText}>My liked posts</Text>
+          </TouchableOpacity>
+        </View>
+        {view === 'My posts' && <MyFiles navigation={navigation} />}
+        {view === 'My liked posts' && <View></View>}
+        <TouchableOpacity style={{padding: 10}} onPress={handleLogout}>
+          <Text style={styles.buttonText}>Logout</Text>
+          <Icon name="logout" color="black" />
+        </TouchableOpacity>
+      </ScrollView>
+
+      {/* Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={{flex: 1, justifyContent: 'center', margin: 10}}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              padding: 20,
+              borderRadius: 10,
+              borderColor: 'black',
+              borderWidth: 2,
+            }}
+          >
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{padding: 10, fontWeight: 'bold'}}>
+                Modify user information
+              </Text>
+              <UploadImage />
+            </View>
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  placeholder={user.username}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  autoCapitalize="none"
+                  errorMessage={errors.username?.message}
+                  style={styles.usernameEdit}
+                />
+              )}
+              name="username"
+            />
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 100,
+                pattern: {
+                  value: /^\S+@\S+\.\S+$/,
+                  message: 'Invalid email address',
+                },
+                validate: async (value) => {
+                  try {
+                    const {available} = await getEmailAvailable(value);
+                    return available ? available : 'Email taken';
+                  } catch (error) {
+                    console.log((error as Error).message);
+                  }
+                },
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  placeholder={user.email}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.email?.message}
+                  autoCapitalize="none"
+                  style={styles.email}
+                />
+              )}
+              name="email"
+            />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{padding: 20}}
+              >
+                <Icon name="close" color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleSubmit(onSubmit)()}
+                style={{padding: 20}}
+              >
+                <Icon name="save" color="black" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
@@ -140,7 +262,10 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#7EAA92',
   },
-  edit: {},
+  usernameEdit: {
+    color: 'black',
+    padding: 10,
+  },
   image: {
     width: 150,
     height: 150,
@@ -164,11 +289,14 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   button: {
-    backgroundColor: '#7EAA92',
+    backgroundColor: 'lightgray',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 30,
     marginTop: 10,
+    margin: 5,
     alignItems: 'center',
+    borderColor: 'white',
+    borderWidth: 2,
   },
   buttonText: {
     color: colors.darkgreen,
@@ -177,6 +305,10 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row',
+  },
+  email: {
+    color: 'black',
+    padding: 10,
   },
 });
 

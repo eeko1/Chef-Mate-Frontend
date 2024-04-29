@@ -1,6 +1,6 @@
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
-import {Card, Icon, ListItem, Button} from '@rneui/base';
+import {Card, Icon, Button} from '@rneui/base';
 import moment from 'moment';
 import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -89,7 +89,7 @@ const MediaListItem = ({item, navigation}: Props) => {
         >
           <Image
             source={{
-              uri: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Profile\nImage',
+              uri: user.profile_picture_url,
             }}
             style={{
               width: 50,

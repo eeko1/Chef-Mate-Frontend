@@ -5,14 +5,18 @@ type UserLevel = {
 };
 
 type User = {
-  user_id: number; // REST API
-  // user_id: string; // GraphQL
+  user_id: number;
   username: string;
   password: string;
   email: string;
   user_level_id: number;
+  // profile_picture_filename?: string; // Optional profile picture filename
+  //profile_picture_filesize?: number; // Optional profile picture filesize
+  //profile_picture_media_type?: string; // Optional profile picture media type
+  profile_picture_url?: string; // Optional profile picture URL
   created_at: Date | string;
 };
+
 
 type MediaItem = {
   media_id: number; // REST API
@@ -27,6 +31,7 @@ type MediaItem = {
   ingredients: string | null;
   description: string | null;
   created_at: Date | string;
+  profile_picture_url?: string;
 };
 
 type Comment = {
