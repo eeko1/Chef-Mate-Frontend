@@ -1,6 +1,6 @@
 import {FlatList, View} from 'react-native';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
-import {SearchBar} from 'react-native-elements';
+import {Card, SearchBar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
 import {useMedia} from '../hooks/apiHooks';
@@ -17,6 +17,14 @@ const Home = ({navigation}: {navigation: NavigationProp<ParamListBase>}) => {
           backgroundColor: colors.lightgreen,
         }}
       >
+        <Card.Image
+          source={require('../../assets/logo.png')}
+          style={{
+            height: 100,
+            width: 200,
+            marginLeft: 70,
+          }}
+        />
         <SearchBar
           placeholder="Search for a recipe"
           containerStyle={{

@@ -19,6 +19,7 @@ import {Credentials} from '../types/LocalTypes';
 import {User} from '../types/DBTypes';
 import {useUpdateContext} from '../hooks/UpdateHook';
 import MyFiles from './MyFiles';
+import MyLikedPosts from './MyLikedPosts';
 
 const Profile = () => {
   const {handleLogout, user, handlePut} = useUserContext();
@@ -26,7 +27,7 @@ const Profile = () => {
     useFollow();
   const [followCount, setFollowCount] = useState<number>(0);
   const [followingCount, setFollowingCount] = useState<number>(0);
-  const navigation = useNavigation();
+  const navigation: NavigationProp<ParamListBase> = useNavigation();
   const {update, setUpdate} = useUpdateContext();
   const [modalVisible, setModalVisible] = useState(false);
   const initValues: Credentials = {username: '', password: '', email: ''};
@@ -89,9 +90,7 @@ const Profile = () => {
   return (
     <>
       <ScrollView contentContainerStyle={styles.container}>
-        <TouchableOpacity
-          onPress={() => setModalVisible(true)} // Open modal when pressed
-        >
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Icon name="edit" color="white" />
         </TouchableOpacity>
         <Card.Image
@@ -102,7 +101,10 @@ const Profile = () => {
             borderRadius: 150,
             marginTop: 10,
           }}
-          source={{uri: user.profile_picture_url}}
+          source={
+            (user.profile_picture_url && {uri: user.profile_picture_url}) ||
+            require('../../assets/katti.png')
+          }
         />
         <ListItem containerStyle={styles.listItem}>
           <ListItem.Title style={styles.listItemTitle}>
@@ -142,13 +144,13 @@ const Profile = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => setView('My liked posts')}
+            onPress={() => setView('My saved posts')}
           >
             <Text style={styles.buttonText}>My liked posts</Text>
           </TouchableOpacity>
         </View>
         {view === 'My posts' && <MyFiles navigation={navigation} />}
-        {view === 'My liked posts' && <View></View>}
+        {view === 'My saved posts' && <MyLikedPosts navigation={navigation} />}
         <TouchableOpacity style={{padding: 10}} onPress={handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
           <Icon name="logout" color="black" />

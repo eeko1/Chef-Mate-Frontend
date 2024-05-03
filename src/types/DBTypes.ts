@@ -127,6 +127,7 @@ type MediaItemWithOwner = MediaItem &
     likes_count: number;
     average_rating?: number;
     comments_count: number;
+    myLikedMedia?: number;
   };
 
 type UserIdWithFollow = {
