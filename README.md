@@ -38,6 +38,12 @@ Upload
 
 Chef Mate sovelluksen backend serveri löytyy tästä [linkistä](https://github.com/eeko1/Chef-Mate-Backend)
 
+## Api Docs
+
+- [Auth server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
+- [Media server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
+- [Upload server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
+
 ## Sovelluksen rautalankamalli
 
 [Tästä](https://www.figma.com/file/pSZZJuq3HMJxlCc6EUkCh0/chef-mate?type=design&node-id=1-2&mode=design&t=orntoBIQE01FHznn-0)
