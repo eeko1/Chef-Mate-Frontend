@@ -1,6 +1,7 @@
 import {Controller, useForm} from 'react-hook-form';
 import {Card, Input} from '@rneui/base';
 import {Alert, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import React from 'react';
 import {useUser} from '../hooks/apiHooks';
 
 const RegisterForm = ({handleToggle}: {handleToggle: () => void}) => {
@@ -165,21 +166,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#7EAA92',
   },
   username: {
-    color: 'white',
+    color: 'black',
     backgroundColor: '#C8E4B2',
     borderWidth: 2,
     borderRadius: 5,
     padding: 5,
   },
   password: {
-    color: 'white',
+    color: 'black',
     backgroundColor: '#C8E4B2',
     borderWidth: 2,
     borderRadius: 5,
     padding: 5,
   },
   email: {
-    color: 'white',
+    color: 'black',
     backgroundColor: '#C8E4B2',
     borderWidth: 2,
     borderRadius: 5,

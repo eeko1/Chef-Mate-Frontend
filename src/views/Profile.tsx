@@ -89,9 +89,7 @@ const Profile = () => {
   return (
     <>
       <ScrollView contentContainerStyle={styles.container}>
-        <TouchableOpacity
-          onPress={() => setModalVisible(true)} // Open modal when pressed
-        >
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Icon name="edit" color="white" />
         </TouchableOpacity>
         <Card.Image
@@ -102,7 +100,10 @@ const Profile = () => {
             borderRadius: 150,
             marginTop: 10,
           }}
-          source={{uri: user.profile_picture_url}}
+          source={
+            (user.profile_picture_url && {uri: user.profile_picture_url}) ||
+            require('../../assets/katti.png')
+          }
         />
         <ListItem containerStyle={styles.listItem}>
           <ListItem.Title style={styles.listItemTitle}>

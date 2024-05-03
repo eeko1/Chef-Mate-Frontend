@@ -4,6 +4,7 @@ import {useForm, Controller} from 'react-hook-form';
 import {Input, Card, Button, ListItem} from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import React from 'react';
 import {useUserContext} from '../hooks/ContextHooks';
 import {Comment, MediaItemWithOwner} from '../types/DBTypes';
 import {useComment} from '../hooks/apiHooks';
@@ -68,7 +69,9 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
   return (
     <>
       <Card containerStyle={{backgroundColor: colors.sage, borderRadius: 5}}>
-        <Card.Title style={{color: colors.text, fontSize: 18}}>Reviews</Card.Title>
+        <Card.Title style={{color: colors.text, fontSize: 18}}>
+          Reviews
+        </Card.Title>
 
         {comments.length > 0 ? (
           comments.map((comment, index) => (
@@ -100,7 +103,9 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
         {user && (
           <>
             <Card.Divider style={{backgroundColor: colors.text}} />
-            <Card.Title style={{color: colors.text, fontSize: 18}}>Post Review</Card.Title>
+            <Card.Title style={{color: colors.text, fontSize: 18}}>
+              Post Review
+            </Card.Title>
             <Controller
               control={control}
               rules={{
@@ -129,7 +134,13 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
             <Button
               onPress={handleSubmit(doComment)}
               title={'Post'}
-              buttonStyle={{backgroundColor: colors.comment, marginTop: 10}}
+              buttonStyle={{
+                backgroundColor: 'lightgray',
+                marginTop: 10,
+                borderWidth: 2,
+                borderColor: 'white',
+                borderRadius: 30,
+              }}
               titleStyle={{color: colors.text}}
             />
           </>

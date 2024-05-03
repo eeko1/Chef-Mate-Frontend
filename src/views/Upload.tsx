@@ -261,11 +261,18 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   resetButton: {
-    backgroundColor: colors.lightgreen,
+    backgroundColor: 'lightgray',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 30,
+    color: 'black',
   },
   uploadButton: {
-    backgroundColor: colors.lightgreen,
-    color: colors.text,
+    backgroundColor: 'lightgray',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 30,
+    color: 'black',
   },
 });
 

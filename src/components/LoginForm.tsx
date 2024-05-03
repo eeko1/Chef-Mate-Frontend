@@ -1,5 +1,6 @@
 import {Controller, useForm} from 'react-hook-form';
-import {Text, Card, Input, Icon} from '@rneui/base';
+import {Text, Card, Input, Icon, Image} from '@rneui/base';
+import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {useUserContext} from '../hooks/ContextHooks';
 import {Credentials} from '../types/LocalTypes';
@@ -21,6 +22,7 @@ const LoginForm = () => {
 
   return (
     <Card containerStyle={styles.container}>
+      <Card.Image source={require('../../assets/logo.png')} />
       <Controller
         control={control}
         rules={{
@@ -77,14 +79,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#7EAA92',
   },
   username: {
-    color: 'white',
+    color: 'black',
     backgroundColor: '#C8E4B2',
     borderWidth: 2,
     borderRadius: 5,
     padding: 5,
   },
   password: {
-    color: 'white',
+    color: 'black',
     backgroundColor: '#C8E4B2',
     borderWidth: 2,
     borderRadius: 5,

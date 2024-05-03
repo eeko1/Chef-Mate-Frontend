@@ -87,10 +87,11 @@ const MediaListItem = ({item, navigation}: Props) => {
             paddingBottom: 10,
           }}
         >
-          <Image
-            source={{
-              uri: user.profile_picture_url,
-            }}
+          <Card.Image
+            source={
+              (item.profile_picture_url && {uri: item.profile_picture_url}) ||
+              require('../../assets/katti.png')
+            }
             style={{
               width: 50,
               height: 50,
@@ -153,24 +154,7 @@ const MediaListItem = ({item, navigation}: Props) => {
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
             {user && user.user_id === item.user_id ? (
-              <>
-                {/*  <Button
-                  onPress={() => {
-                    navigation.navigate('Modify', item);
-                  }}
-                >
-                  <Icon type="ionicon" name="create" color="white" />
-                </Button>
-                <Button
-                  color="error"
-                  onPress={() => {
-                    console.log('delete');
-                  }}
-                >
-                  {' '}
-                  <Icon type="ionicon" name="trash" color="white" />
-                </Button> */}
-              </>
+              <></>
             ) : (
               <TouchableOpacity
                 onPress={() => {
