@@ -129,7 +129,7 @@ const Single = ({route}: any) => {
               </TouchableOpacity>
             </View>
             {view === 'details' && (
-              <View>
+              <View style={styles.detailsContainer}>
                 <Comments item={item} />
               </View>
             )}
@@ -154,6 +154,9 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     backgroundColor: colors.lightgreen,
+    borderWidth: 0,
+    elevation: 0,
+    shadowOpacity: 0,
   },
   profileSection: {
     flexDirection: 'row',

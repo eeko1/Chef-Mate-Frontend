@@ -4,11 +4,12 @@ import {useForm, Controller} from 'react-hook-form';
 import {Input, Card, Button, ListItem} from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {formatDistanceToNow} from 'date-fns';
 import {useUserContext} from '../hooks/ContextHooks';
 import {Comment, MediaItemWithOwner} from '../types/DBTypes';
 import {useComment} from '../hooks/apiHooks';
 import colors from '../styles/colors';
-import React from 'react';
 
 const Comments = ({item}: {item: MediaItemWithOwner}) => {
   const [comments, setComments] = useState<
@@ -68,41 +69,17 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
 
   return (
     <>
-      <Card containerStyle={{backgroundColor: colors.sage, borderRadius: 5}}>
-        <Card.Title style={{color: colors.text, fontSize: 18}}>
-          Reviews
-        </Card.Title>
-
-        {comments.length > 0 ? (
-          comments.map((comment, index) => (
-            <View
-              key={index}
-              style={{
-                backgroundColor: colors.sage,
-                marginBottom: 10,
-                padding: 8,
-                borderRadius: 5,
-              }}
-            >
-              <Text style={{color: colors.text, fontWeight: 'bold'}}>
-                {comment.username}:
-              </Text>
-              <Text style={{color: colors.text}}>{comment.comment_text}</Text>
-              <Text style={{color: colors.text}}>
-                Posted on{' '}
-                {new Date(comment.created_at).toLocaleDateString('fi-FI')}
-              </Text>
-            </View>
-          ))
-        ) : (
-          <Text style={{color: colors.text, textAlign: 'center', padding: 10}}>
-            No reviews yet.
-          </Text>
-        )}
-
+      <Card
+        containerStyle={{
+          backgroundColor: colors.sage,
+          borderRadius: 5,
+          borderWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
+        }}
+      >
         {user && (
           <>
-            <Card.Divider style={{backgroundColor: colors.text}} />
             <Card.Title style={{color: colors.text, fontSize: 18}}>
               Post Review
             </Card.Title>
@@ -111,7 +88,7 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
               rules={{
                 required: {
                   value: true,
-                  message: 'A review is required.',
+                  message: 'Text is required',
                 },
               }}
               render={({field: {onChange, onBlur, value}}) => (
@@ -134,10 +111,53 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
             <Button
               onPress={handleSubmit(doComment)}
               title={'Post'}
-              buttonStyle={{backgroundColor: colors.comment, marginTop: 10}}
+              buttonStyle={{
+                backgroundColor: colors.mossgreen,
+                paddingBottom: 10,
+                borderRadius: 10,
+              }}
               titleStyle={{color: colors.text}}
             />
           </>
+        )}
+        <Card.Title style={{color: colors.text, fontSize: 18, paddingTop: 10}}>
+          Reviews
+        </Card.Title>
+        {comments.length > 0 ? (
+          comments.map((comment, index) => (
+            <View
+              key={index}
+              style={{
+                backgroundColor: colors.sage,
+                marginBottom: 10,
+                padding: 8,
+                borderRadius: 5,
+                borderWidth: 0,
+              }}
+            >
+              <View style={{flexDirection: 'row'}}>
+                <Text
+                  style={{
+                    color: colors.text,
+                    fontWeight: 'bold',
+                    paddingRight: 20,
+                  }}
+                >
+                  {comment.username}
+                </Text>
+                <Text style={{color: colors.mossgreen}}>
+                  {formatDistanceToNow(new Date(comment.created_at))} ago
+                </Text>
+              </View>
+              <Text style={{color: colors.text, fontSize: 16, paddingTop: 10}}>
+                {comment.comment_text}
+              </Text>
+            </View>
+          ))
+        ) : (
+          <Text style={{color: colors.text, textAlign: 'center', padding: 10}}>
+            No reviews yet.
+          </Text>
         )}
       </Card>
     </>
