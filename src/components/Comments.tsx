@@ -8,6 +8,7 @@ import {useUserContext} from '../hooks/ContextHooks';
 import {Comment, MediaItemWithOwner} from '../types/DBTypes';
 import {useComment} from '../hooks/apiHooks';
 import colors from '../styles/colors';
+import React from 'react';
 
 const Comments = ({item}: {item: MediaItemWithOwner}) => {
   const [comments, setComments] = useState<
@@ -68,7 +69,9 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
   return (
     <>
       <Card containerStyle={{backgroundColor: colors.sage, borderRadius: 5}}>
-        <Card.Title style={{color: colors.text, fontSize: 18}}>Reviews</Card.Title>
+        <Card.Title style={{color: colors.text, fontSize: 18}}>
+          Reviews
+        </Card.Title>
 
         {comments.length > 0 ? (
           comments.map((comment, index) => (
@@ -100,7 +103,9 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
         {user && (
           <>
             <Card.Divider style={{backgroundColor: colors.text}} />
-            <Card.Title style={{color: colors.text, fontSize: 18}}>Post Review</Card.Title>
+            <Card.Title style={{color: colors.text, fontSize: 18}}>
+              Post Review
+            </Card.Title>
             <Controller
               control={control}
               rules={{
