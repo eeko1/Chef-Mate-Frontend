@@ -22,6 +22,48 @@ import {
   UserResponse,
 } from '../types/MessageTypes';
 import {useUpdateContext} from './UpdateHook';
+import {useUserContext} from './ContextHooks';
+
+const useMyLikedPosts = () => {
+  const [myLikedPosts, setMyLikedPosts] = useState<MediaItemWithOwner[]>([]);
+  const {user} = useUserContext();
+
+  const getMyLikedPosts = async () => {
+    try {
+      // Fetch all likes
+      const allLikes = await fetchData<Like[]>(
+        process.env.EXPO_PUBLIC_MEDIA_API + '/likes',
+      );
+      // Filter likes by the current user
+      const myLikes = allLikes.filter((like) => like.user_id === user.user_id);
+      // Fetch the corresponding posts
+      const posts: MediaItemWithOwner[] = await Promise.all(
+        myLikes.map(async (like) => {
+          const item = await fetchData<MediaItem>(
+            process.env.EXPO_PUBLIC_MEDIA_API + '/media/' + like.media_id,
+          );
+          const owner = await fetchData<User>(
+            process.env.EXPO_PUBLIC_AUTH_API + '/users/' + item.user_id,
+          );
+          const itemWithOwner: MediaItemWithOwner = {
+            ...item,
+            username: owner.username,
+          };
+          return itemWithOwner;
+        }),
+      );
+      setMyLikedPosts(posts);
+    } catch (error) {
+      console.error('getMyLikedPosts failed', error);
+    }
+  };
+
+  useEffect(() => {
+    getMyLikedPosts();
+  }, []);
+
+  return { myLikedPosts };
+};
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
@@ -545,4 +587,5 @@ export {
   useFollow,
   useComment,
   useRating,
+  useMyLikedPosts,
 };
