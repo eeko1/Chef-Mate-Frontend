@@ -16,6 +16,7 @@ import React, {useState} from 'react';
 import {useUserContext} from '../hooks/ContextHooks';
 import colors from '../styles/colors';
 import MyFiles from './MyFiles';
+import MyLikedPosts from './MyLikedPosts';
 
 const Profile = () => {
   const {handleLogout, user} = useUserContext();
@@ -74,15 +75,13 @@ const Profile = () => {
               style={styles.button}
               onPress={() => setView('My saved posts')}
             >
-              <Text style={styles.buttonText}>My saved posts</Text>
+              <Text style={styles.buttonText}>My liked posts</Text>
             </TouchableOpacity>
             <Card.Divider />
           </View>
           {view === 'My posts' && <MyFiles navigation={navigation} />}
           {view === 'My saved posts' && (
-            <View>
-              <Text>My saved posts</Text>
-            </View>
+            <MyLikedPosts navigation={navigation} />
           )}
           <TouchableOpacity style={styles.button} onPress={handleLogout}>
             <Text style={styles.buttonText}>Logout</Text>
