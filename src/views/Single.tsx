@@ -208,11 +208,15 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     padding: 10,
-    borderRadius: 5,
     flex: 1,
     alignItems: 'center',
     marginRight: 5,
     marginLeft: 5,
+    marginBottom: 10,
+    backgroundColor: 'lightgray',
+    borderColor: 'white',
+    borderWidth: 2,
+    borderRadius: 30,
   },
   detailsContainer: {
     backgroundColor: colors.sage,
