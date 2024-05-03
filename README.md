@@ -40,6 +40,8 @@ Chef Mate sovelluksen backend serveri löytyy tästä [linkistä](https://github
 
 ## Api Docs
 
+Linkit sovelluksen api docseihin
+
 - [Auth server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
 - [Media server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
 - [Upload server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
