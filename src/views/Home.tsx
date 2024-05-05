@@ -1,22 +1,41 @@
 import {FlatList, View} from 'react-native';
-import {NavigationProp, ParamListBase} from '@react-navigation/native';
-import {Card, SearchBar} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import React from 'react';
+import {Card} from 'react-native-elements';
+import {Text, TextInput} from 'react-native-paper';
+import React, {useMemo, useState} from 'react';
 import {useMedia} from '../hooks/apiHooks';
 import MediaListItem from '../components/MediaListItem';
 import colors from '../styles/colors';
 
-const Home = ({navigation}: {navigation: NavigationProp<ParamListBase>}) => {
+const Home = ({navigation}) => {
   const {mediaArray} = useMedia();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const onChangeSearch = (query) => setSearchQuery(query);
+
+  const filteredMedia = useMemo(() => {
+    if (!searchQuery) return mediaArray;
+
+    const searchTerms = searchQuery
+      .toLowerCase()
+      .split(/\s+|,/)
+      .map((term) => term.trim())
+      .filter((term) => term);
+
+    return mediaArray.filter((item) => {
+      const ingredients = item.ingredients
+        .toLowerCase()
+        .split(/[,&]+| and /)
+        .map((ingredient) => ingredient.trim());
+
+      return searchTerms.every((term) =>
+        ingredients.some((ingredient) => ingredient.includes(term)),
+      );
+    });
+  }, [searchQuery, mediaArray]);
 
   return (
     <>
-      <View
-        style={{
-          backgroundColor: colors.lightgreen,
-        }}
-      >
+      <View style={{backgroundColor: colors.lightgreen}}>
         <Card.Image
           source={require('../../assets/logo.png')}
           style={{
@@ -25,41 +44,42 @@ const Home = ({navigation}: {navigation: NavigationProp<ParamListBase>}) => {
             marginLeft: 70,
           }}
         />
-        <SearchBar
-          placeholder="Search for a recipe"
-          containerStyle={{
-            backgroundColor: colors.lightgreen,
-            borderBottomColor: 'transparent',
-            borderTopColor: 'transparent',
+        <TextInput
+          placeholder="Search recipes by ingredients"
+          value={searchQuery}
+          onChangeText={onChangeSearch}
+          style={{
+            backgroundColor: colors.sage,
+            margin: 10,
+            minHeight: 50,
+            fontSize: 20,
+            borderRadius: 10,
           }}
-          inputContainerStyle={{backgroundColor: colors.sage}}
-          inputStyle={{color: colors.darkgreen, fontSize: 20}}
-          placeholderTextColor={colors.darkgreen}
-          onBlur={undefined}
-          onChangeText={undefined}
-          onFocus={undefined}
-          value={''}
-          platform={'default'}
-          clearIcon={undefined}
-          searchIcon={<Icon name="search" color={colors.darkgreen} />}
-          loadingProps={undefined}
-          showLoading={false}
-          onClear={undefined}
-          onCancel={undefined}
-          lightTheme={false}
-          round={true}
-          cancelButtonTitle={''}
-          cancelButtonProps={undefined}
-          showCancel={false}
         />
       </View>
-      <FlatList
-        style={{backgroundColor: colors.lightgreen}}
-        data={mediaArray}
-        renderItem={({item}) => (
-          <MediaListItem navigation={navigation} item={item} />
-        )}
-      />
+      {filteredMedia.length > 0 ? (
+        <FlatList
+          style={{backgroundColor: colors.lightgreen}}
+          data={filteredMedia}
+          renderItem={({item}) => (
+            <MediaListItem navigation={navigation} item={item} />
+          )}
+          keyExtractor={(item) => item?.id?.toString()}
+        />
+      ) : (
+        <View
+          style={{
+            backgroundColor: colors.lightgreen,
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Text style={{color: 'black', fontSize: 20}}>
+            Could not find any recipes by those ingredients.
+          </Text>
+        </View>
+      )}
     </>
   );
 };
