@@ -55,6 +55,12 @@ Upload
 
 <img src="./assets/database-diagram.png">
 
+Each user can own multiple media items but each media item belongs to one user. Each user can like, rate and review multiple media items. 
+Each user can follow multiple other users and each user can be followed by multiple users. Media items can have multiple likes, ratings and reviews. 
+Each user belongs to one user level but each user level can be associated with multiple users. 
+
+## Back-end server
+
 Chef Mate sovelluksen backend serveri löytyy tästä [linkistä](https://github.com/eeko1/Chef-Mate-Backend)
 
 ## Api Docs
