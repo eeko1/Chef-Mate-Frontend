@@ -67,7 +67,7 @@ Linkit sovelluksen back-end servereihin, jotka pyörivät Metropolian serverill�
 
 ## Front-end käyttöönotto
 
-Lataa Expo Go sovellus puhelimeesi. Varmista, että olet samassa netissä kuin laite, jossa sovellus pyörii. Skanna QR-koodi. 
+Lataa Expo Go sovellus puhelimeesi. Varmista, että olet samassa netissä kuin laite, jossa sovellus pyörii. Skanna QR-koodi.
 
 ## Api Docs
 
@@ -93,6 +93,12 @@ Linkit sovelluksen api docseihin
 ## Käytetty ikoni kirjasto
 
 [Linkki](https://oblador.github.io/react-native-vector-icons/)
+
+## Tiedossa olevat bugit ja ongelmat
+
+- Tykkäykset ja tähtiarvioinnit eivät päivity home näkymään, kun yksittäisen postauksen näkymästä vaihtaa takaisin home näkymään, jos on yksittäisessä näkymässä tykännyt tai arvioinut postauksen. Tykkäys silti päivittyy tietokantaan ja päivittyy myös home näytölle sovelluksen ladatessa uudestaan.
+
+- "Instructions" -kohta uploadauksessa ei mahdollista tarpeeksi pitkää kuvausta. Liian pitkästä "instructions" -osuudesta tulee error.
 
 ## Tekijät
 
