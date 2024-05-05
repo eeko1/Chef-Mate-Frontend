@@ -48,7 +48,7 @@ Linkit sovelluksen api docseihin
 
 - [Auth server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
 - [Media server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
-- [Upload server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
+- [Upload server](https://users.metropolia.fi/~eemiko/Apidocs/Upload-server/)
 
 ## Testikansio
 
