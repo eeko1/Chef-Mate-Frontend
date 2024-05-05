@@ -59,9 +59,13 @@ Each user can own multiple media items but each media item belongs to one user. 
 Each user can follow multiple other users and each user can be followed by multiple users. Media items can have multiple likes, ratings and reviews. 
 Each user belongs to one user level but each user level can be associated with multiple users. 
 
-## Back-end server
+## Back-end serverit
 
-Chef Mate sovelluksen backend serveri löytyy tästä [linkistä](https://github.com/eeko1/Chef-Mate-Backend)
+Linkit sovelluksen back-end servereihin/API:n
+
+- [Auth server](10.120.32.59/auth-api/api/v1)
+- [Media server](0.120.32.59/media-api/api/v1)
+- [Upload server](10.120.32.59/upload/api/v1)
 
 ## Api Docs
 
