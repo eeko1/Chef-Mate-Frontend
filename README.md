@@ -8,6 +8,21 @@ Chef Mate on mobiilisovellus tarkoitettu ympäristöystävällisempään ruoanla
 Käyttäjät voivat jakaa omia reseptejään tai hakea reseptiä jo kotoa löytyvien raaka-aineiden perusteella, täten vähentäen kotitalouksien ruokahävikkiä.
 Sovellus myös luo yhteisön ympäristötietoisille kuluttajille, jossa he pääsevät vuorovaikutukseen toistensa kanssa. Projekti on tehty Metropolian Monialustaprojekti-kurssin aikana.
 
+## Sovelluksen käyttöliittymä
+
+<table>
+  <tr>
+    <th>Home</th>
+    <th>Profile</th>
+    <th>Upload</th>
+  </tr>
+  <tr>
+    <td><img src="./assets/screenshots/Chefmate-homepage.jpg" alt="Homepage" width="200"/></td>
+    <td><img src="./assets/screenshots/Chefmate-profilepage.jpg" alt="Profile Page" width="200"/></td>
+    <td><img src="./assets/screenshots/Chefmate-uploadpage.jpg" alt="Upload Page" width="200"/></td>
+  </tr>
+</table>
+
 ## Sovelluksen toiminnallisuudet
 
 Sovelluksessa on kolme sivua: kotisivu, profiilisivu ja upload sivu. Alla listataan sivujen toiminnallisuuksia.
@@ -47,7 +62,7 @@ Chef Mate sovelluksen backend serveri löytyy tästä [linkistä](https://github
 Linkit sovelluksen api docseihin
 
 - [Auth server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
-- [Media server](https://users.metropolia.fi/~eemiko/Apidocs/Auth-server/)
+- [Media server](https://users.metropolia.fi/~eemiko/Apidocs/Media-Api/)
 - [Upload server](https://users.metropolia.fi/~eemiko/Apidocs/Upload-server/)
 
 ## Testikansio
