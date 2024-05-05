@@ -53,7 +53,7 @@ Upload
 
 ## [Projektin tietokanta](https://github.com/eeko1/Chef-Mate-Backend/blob/main/database.sql)
 
-<img src="./assets/database-diagram.png" alt="SQL Diagram" width="900">
+<img src="./assets/database-diagram-updated.png" alt="SQL Diagram" width="900">
 
 Each user can own multiple media items but each media item belongs to one user. Each user can like, rate and review multiple media items.
 Each user can follow multiple other users and each user can be followed by multiple users. Media items can have multiple likes, ratings and reviews.
