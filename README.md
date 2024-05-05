@@ -63,9 +63,9 @@ Each user belongs to one user level but each user level can be associated with m
 
 Linkit sovelluksen back-end servereihin
 
-- [Auth server](10.120.32.59/auth-api/api/v1)
-- [Media server](0.120.32.59/media-api/api/v1)
-- [Upload server](10.120.32.59/upload/api/v1)
+- [Auth server](http://10.120.32.59/auth-api/api/v1)
+- [Media server](http://0.120.32.59/media-api/api/v1)
+- [Upload server](http://10.120.32.59/upload/api/v1)
 
 ## Api Docs
 
