@@ -65,6 +65,10 @@ Linkit sovelluksen back-end servereihin, jotka pyörivät Metropolian serverill�
 - [Media server](http://0.120.32.59/media-api/api/v1)
 - [Upload server](http://10.120.32.59/upload/api/v1)
 
+  ## Front-end käyttöönotto
+
+Lataa Expo Go sovellus puhelimeesi. Varmista, että olet samassa netissä kuin laite, jossa sovellus pyörii. Skanna QR-koodi. 
+
 ## Api Docs
 
 Linkit sovelluksen api docseihin
