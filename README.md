@@ -55,9 +55,7 @@ Upload
 
 <img src="./assets/database-diagram-updated.png" alt="SQL Diagram" width="900">
 
-Each user can own multiple media items but each media item belongs to one user. Each user can like, rate and review multiple media items.
-Each user can follow multiple other users and each user can be followed by multiple users. Media items can have multiple likes, ratings and reviews.
-Each user belongs to one user level but each user level can be associated with multiple users.
+Jokaisella käyttäjällä voi olla useita media items, mutta jokainen media item kuuluu yhdelle käyttäjälle. Jokainen käyttäjä voi tykätä, arvostella ja arvioida useita media items. Jokainen käyttäjä voi seurata useita muita käyttäjiä, ja jokainen käyttäjä voi olla useiden käyttäjien seuraama. Media items voi olla useita tykkäyksiä, arvosteluja ja arvioita. Jokainen käyttäjä kuuluu yhteen käyttäjätasoon, mutta jokainen käyttäjätaso voi olla yhteydessä useisiin käyttäjiin.
 
 ## Back-end serverit
 
