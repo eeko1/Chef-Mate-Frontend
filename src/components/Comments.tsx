@@ -112,15 +112,25 @@ const Comments = ({item}: {item: MediaItemWithOwner}) => {
               onPress={handleSubmit(doComment)}
               title={'Post'}
               buttonStyle={{
-                backgroundColor: colors.mossgreen,
+                backgroundColor: 'lightgray',
                 paddingBottom: 10,
-                borderRadius: 10,
+                borderRadius: 30,
+                borderWidth: 2,
+                borderColor: 'white',
+
               }}
               titleStyle={{color: colors.text}}
             />
           </>
         )}
-        <Card.Title style={{color: colors.text, fontSize: 18, paddingTop: 10}}>
+        <Card.Title
+          style={{
+            color: colors.text,
+            fontSize: 18,
+            paddingTop: 10,
+            fontWeight: 'bold',
+          }}
+        >
           Reviews
         </Card.Title>
         {comments.length > 0 ? (
